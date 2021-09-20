@@ -1,0 +1,7 @@
+.errorMessage {
+    color: red;
+}
+
+.isDone {
+    opacity: 0.5;
+}
