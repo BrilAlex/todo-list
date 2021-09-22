@@ -7,7 +7,7 @@ type propsType={
     callBack: () => void
 }
 
-export const Button=(props:propsType)=>{
+export const Button = (props:propsType) => {
     const callBackHandler = () => props.callBack();
 
     let getValidClassNameForButton = props.activeStatus ? styles.active : "";

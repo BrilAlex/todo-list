@@ -1,41 +1,41 @@
 import React, {ChangeEvent, KeyboardEvent} from "react";
 import styles from "./Input.module.css";
 
-type AddTaskInputProps = {
-    title: string
-    callBack: () => void
-    setTitle: (title: string) => void
+type InputPropsType = {
+    value: string
+    setValue: (title: string) => void
     inputError: boolean
     setInputError: (value: boolean) => void
+    callBack: () => void
 }
 
-export const Input = (props: AddTaskInputProps) => {
+export const Input = (props: InputPropsType) => {
 
-
-    const onChangehandler = (event: ChangeEvent<HTMLInputElement>) => {
-        props.setTitle(event.currentTarget.value);
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        props.setValue(event.currentTarget.value);
         props.setInputError(false);
     }
 
-    const onKeyPresshandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            if(props.title.trim() !== "") {
-                props.callBack()
-                props.setTitle('')
+            if(props.value.trim() !== "") {
+                props.callBack();
+                props.setValue("");
             } else {
                 props.setInputError(true);
+                props.setValue("");
             }
         }
     }
 
-    let getValidClassName = props.inputError ? styles.error : "";
+    let getClassName = props.inputError ? styles.error : "";
 
     return (
         <input
-            value={props.title}
-            onChange={onChangehandler}
-            onKeyPress={onKeyPresshandler}
-            className={getValidClassName}
+            value={props.value}
+            className={getClassName}
+            onChange={onChangeHandler}
+            onKeyPress={onKeyPressHandler}
         />
     );
 }
