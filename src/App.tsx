@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import {Menu} from '@material-ui/icons';
 
-type TodoListType = {
+export type TodoListType = {
   id: string
   title: string
   filter: FilterValueType
