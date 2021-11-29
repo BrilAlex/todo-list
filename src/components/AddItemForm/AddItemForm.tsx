@@ -6,7 +6,8 @@ type AddItemFormPropsType = {
   callback: (title: string) => void
 };
 
-export const AddItemForm = (props: AddItemFormPropsType) => {
+export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+  console.log("AddItemForm called");
   const [inputValue, setInputValue] = useState<string>("");
   const [inputError, setInputError] = useState<boolean>(false);
 
@@ -42,4 +43,4 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
       </IconButton>
     </div>
   );
-};
+});
