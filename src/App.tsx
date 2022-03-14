@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./components/ToDoList/TodoList";
 import {v1} from "uuid";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 
 export type FilterValueType = "all" | "active" | "completed";
 
@@ -53,6 +54,14 @@ function App() {
     setTasks({...tasks});
   };
 
+  const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
+    const task = tasks[todoList_ID].find(t => t.id === task_ID);
+    if (task) {
+      task.title = newTitle;
+      setTasks({...tasks});
+    }
+  };
+
   const changeTaskStatus = (todoList_ID: string, task_ID: string, isDone: boolean) => {
     const task = tasks[todoList_ID].find(t => t.id === task_ID);
     if (task) {
@@ -64,6 +73,20 @@ function App() {
   const removeTask = (todoList_ID: string, task_ID: string) => {
     tasks[todoList_ID] = tasks[todoList_ID].filter(t => t.id !== task_ID);
     setTasks({...tasks});
+  };
+
+  const addTodoList = (title: string) => {
+    const newTodoList: TodoListType = {id: v1(), title, filter: "all"};
+    setTodoLists([newTodoList, ...todoLists]);
+    setTasks({...tasks, [newTodoList.id]: []});
+  };
+
+  const changeTodoListTitle = (todoList_ID: string, newTitle: string) => {
+    const todoList = todoLists.find(tl => tl.id === todoList_ID);
+    if(todoList) {
+      todoList.title = newTitle;
+      setTodoLists([...todoLists]);
+    }
   };
 
   const changeFilter = (todoList_ID: string, filterValue: FilterValueType) => {
@@ -82,6 +105,7 @@ function App() {
 
   return (
     <div className="App">
+      <AddItemForm addItem={addTodoList}/>
       {todoLists.map(tl => {
         let tasksForTodoList = tasks[tl.id];
 
@@ -101,6 +125,8 @@ function App() {
             tasks={tasksForTodoList}
             filter={tl.filter}
             addTask={addTask}
+            changeTaskTitle={changeTaskTitle}
+            changeTodoListTitle={changeTodoListTitle}
             changeTaskStatus={changeTaskStatus}
             removeTask={removeTask}
             changeFilter={changeFilter}
