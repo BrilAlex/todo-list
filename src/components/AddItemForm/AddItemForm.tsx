@@ -1,5 +1,6 @@
-import styles from "../ToDoList/TodoList.module.css";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import {IconButton, TextField} from "@mui/material";
+import {AddCircleOutline} from "@mui/icons-material";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void
@@ -30,14 +31,19 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
 
   return (
     <div>
-      <input
+      <TextField
+        variant={"outlined"}
         value={value}
         onChange={onChangeHandler}
         onKeyPress={onKeyPressHandler}
-        className={error ? styles.error : ""}
+        label={"Title"}
+        error={!!error}
+        helperText={error}
+        size={"small"}
       />
-      <button onClick={addTask}>+</button>
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      <IconButton onClick={addTask} color={"primary"}>
+        <AddCircleOutline/>
+      </IconButton>
     </div>
   );
 };
