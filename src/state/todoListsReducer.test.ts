@@ -8,8 +8,8 @@ import {
 import {FilterValueType, TodoListType} from "../App";
 
 test("Correct TodoList should be removed", () => {
-  let todoList_ID1 = v1();
-  let todoList_ID2 = v1();
+  const todoList_ID1 = v1();
+  const todoList_ID2 = v1();
 
   const startState: Array<TodoListType> = [
     {id: todoList_ID1, title: "What to learn", filter: "all"},
@@ -23,10 +23,10 @@ test("Correct TodoList should be removed", () => {
 });
 
 test("Correct TodoList should be added", () => {
-  let todoList_ID1 = v1();
-  let todoList_ID2 = v1();
+  const todoList_ID1 = v1();
+  const todoList_ID2 = v1();
 
-  let newTodoListTitle = "New TodoList";
+  const newTodoListTitle = "New TodoList";
 
   const startState: Array<TodoListType> = [
     {id: todoList_ID1, title: "What to learn", filter: "all"},
@@ -41,10 +41,10 @@ test("Correct TodoList should be added", () => {
 });
 
 test("Correct TodoList should change it's name", () => {
-  let todoList_ID1 = v1();
-  let todoList_ID2 = v1();
+  const todoList_ID1 = v1();
+  const todoList_ID2 = v1();
 
-  let newTodoListTitle = "New Title";
+  const newTodoListTitle = "New Title";
 
   const startState: Array<TodoListType> = [
     {id: todoList_ID1, title: "What to learn", filter: "all"},
@@ -52,7 +52,6 @@ test("Correct TodoList should change it's name", () => {
   ];
 
   const action = changeTodoListTitleAC(todoList_ID2, newTodoListTitle);
-
   const endState = todoListsReducer(startState, action);
 
   expect(endState[0].title).toBe("What to learn");
@@ -60,10 +59,10 @@ test("Correct TodoList should change it's name", () => {
 });
 
 test("Correct TodoList filter should be changed", () => {
-  let todoList_ID1 = v1();
-  let todoList_ID2 = v1();
+  const todoList_ID1 = v1();
+  const todoList_ID2 = v1();
 
-  let newFilter: FilterValueType = "completed";
+  const newFilter: FilterValueType = "completed";
 
   const startState: Array<TodoListType> = [
     {id: todoList_ID1, title: "What to learn", filter: "all"},
@@ -71,7 +70,6 @@ test("Correct TodoList filter should be changed", () => {
   ];
 
   const action = changeTodoListFilterAC(todoList_ID2, newFilter);
-
   const endState = todoListsReducer(startState, action);
 
   expect(endState[0].filter).toBe("all");

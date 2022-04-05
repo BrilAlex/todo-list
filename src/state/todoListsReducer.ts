@@ -8,6 +8,7 @@ export type RemoveTodoListActionType = {
 
 export type AddTodoListActionType = {
   type: "ADD-TODOLIST"
+  id: string
   title: string
 };
 
@@ -32,7 +33,7 @@ export const removeTodoListAC = (todoList_ID: string): RemoveTodoListActionType 
 };
 
 export const addTodoListAC = (title: string): AddTodoListActionType => {
-  return {type: "ADD-TODOLIST", title};
+  return {type: "ADD-TODOLIST", id: v1(), title};
 };
 
 export const changeTodoListTitleAC = (todoList_ID: string, newTitle: string): ChangeTodoListTitleActionType => {
@@ -51,7 +52,7 @@ export const todoListsReducer = (state: Array<TodoListType>, action: ActionType)
     case "ADD-TODOLIST": {
       return [
         ...state,
-        {id: v1(), title: action.title, filter: "all"}
+        {id: action.id, title: action.title, filter: "all"}
       ];
     }
     case "CHANGE-TODOLIST-TITLE": {
@@ -69,6 +70,6 @@ export const todoListsReducer = (state: Array<TodoListType>, action: ActionType)
       return [...state];
     }
     default:
-      throw new Error("Invalid action type");
+      throw new Error("Invalid action type for todoListReducer");
   }
 };
