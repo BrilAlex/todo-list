@@ -2,8 +2,10 @@ import {TasksType} from "../App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasksReducer";
 import {addTodoListAC, removeTodoListAC} from "./todoListsReducer";
 
-test("Correct task should be deleted from correct array", () => {
-  const startState: TasksType = {
+let startState: TasksType;
+
+beforeEach(() => {
+  startState = {
     "todoList_ID1": [
       {id: "1", title: "HTML", isDone: true},
       {id: "2", title: "CSS", isDone: true},
@@ -15,7 +17,9 @@ test("Correct task should be deleted from correct array", () => {
       {id: "3", title: "Tea", isDone: false},
     ],
   };
+});
 
+test("Correct task should be deleted from correct array", () => {
   const action = removeTaskAC("todoList_ID2", "2");
   const endState = tasksReducer(startState, action);
 
@@ -36,19 +40,6 @@ test("Correct task should be deleted from correct array", () => {
 });
 
 test("Correct task should be added to correct array", () => {
-  const startState: TasksType = {
-    "todoList_ID1": [
-      {id: "1", title: "HTML", isDone: true},
-      {id: "2", title: "CSS", isDone: true},
-      {id: "3", title: "React", isDone: false},
-    ],
-    "todoList_ID2": [
-      {id: "1", title: "Bread", isDone: false},
-      {id: "2", title: "Milk", isDone: true},
-      {id: "3", title: "Tea", isDone: false},
-    ],
-  };
-
   const action = addTaskAC("todoList_ID2", "Juice");
   const endState = tasksReducer(startState, action);
 
@@ -60,19 +51,6 @@ test("Correct task should be added to correct array", () => {
 });
 
 test("Status of specified task should be changed", () => {
-  const startState: TasksType = {
-    "todoList_ID1": [
-      {id: "1", title: "HTML", isDone: true},
-      {id: "2", title: "CSS", isDone: true},
-      {id: "3", title: "React", isDone: false},
-    ],
-    "todoList_ID2": [
-      {id: "1", title: "Bread", isDone: false},
-      {id: "2", title: "Milk", isDone: true},
-      {id: "3", title: "Tea", isDone: false},
-    ],
-  };
-
   const action = changeTaskStatusAC("todoList_ID2", "2", false);
   const endState = tasksReducer(startState, action);
 
@@ -81,19 +59,6 @@ test("Status of specified task should be changed", () => {
 });
 
 test("Title of specified task should be changed", () => {
-  const startState: TasksType = {
-    "todoList_ID1": [
-      {id: "1", title: "HTML", isDone: true},
-      {id: "2", title: "CSS", isDone: true},
-      {id: "3", title: "React", isDone: false},
-    ],
-    "todoList_ID2": [
-      {id: "1", title: "Bread", isDone: false},
-      {id: "2", title: "Milk", isDone: true},
-      {id: "3", title: "Tea", isDone: false},
-    ],
-  };
-
   const action = changeTaskTitleAC("todoList_ID2", "2", "Coffee");
   const endState = tasksReducer(startState, action);
 
@@ -102,19 +67,6 @@ test("Title of specified task should be changed", () => {
 });
 
 test("New array should be added when new todolist is added", () => {
-  const startState: TasksType = {
-    "todoList_ID1": [
-      {id: "1", title: "HTML", isDone: true},
-      {id: "2", title: "CSS", isDone: true},
-      {id: "3", title: "React", isDone: false},
-    ],
-    "todoList_ID2": [
-      {id: "1", title: "Bread", isDone: false},
-      {id: "2", title: "Milk", isDone: true},
-      {id: "3", title: "Tea", isDone: false},
-    ],
-  };
-
   const action = addTodoListAC("New TodoList");
   const endState = tasksReducer(startState, action);
 
@@ -129,19 +81,6 @@ test("New array should be added when new todolist is added", () => {
 });
 
 test("Property with TodoList_ID should be deleted", () => {
-  const startState: TasksType = {
-    "todoList_ID1": [
-      {id: "1", title: "HTML", isDone: true},
-      {id: "2", title: "CSS", isDone: true},
-      {id: "3", title: "React", isDone: false},
-    ],
-    "todoList_ID2": [
-      {id: "1", title: "Bread", isDone: false},
-      {id: "2", title: "Milk", isDone: true},
-      {id: "3", title: "Tea", isDone: false},
-    ],
-  };
-
   const action = removeTodoListAC("todoList_ID2");
   const endState = tasksReducer(startState, action);
 

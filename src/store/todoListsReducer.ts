@@ -28,48 +28,39 @@ type ActionType =
   RemoveTodoListActionType | AddTodoListActionType |
   ChangeTodoListTitleActionType | ChangeTodoListFilterActionType;
 
+const initState: Array<TodoListType> = [];
+
 export const removeTodoListAC = (todoList_ID: string): RemoveTodoListActionType => {
   return {type: "REMOVE-TODOLIST", id: todoList_ID};
 };
-
 export const addTodoListAC = (title: string): AddTodoListActionType => {
   return {type: "ADD-TODOLIST", id: v1(), title};
 };
-
 export const changeTodoListTitleAC = (todoList_ID: string, newTitle: string): ChangeTodoListTitleActionType => {
   return {type: "CHANGE-TODOLIST-TITLE", id: todoList_ID, title: newTitle};
 };
-
 export const changeTodoListFilterAC = (todoList_ID: string, newFilter: FilterValueType): ChangeTodoListFilterActionType => {
   return {type: "CHANGE-TODOLIST-FILTER", id: todoList_ID, filter: newFilter};
 };
 
-export const todoListsReducer = (state: Array<TodoListType>, action: ActionType): Array<TodoListType> => {
+export const todoListsReducer = (state: Array<TodoListType> = initState, action: ActionType): Array<TodoListType> => {
   switch (action.type) {
     case "REMOVE-TODOLIST": {
       return state.filter(tl => tl.id !== action.id);
     }
     case "ADD-TODOLIST": {
       return [
+        {id: action.id, title: action.title, filter: "all"},
         ...state,
-        {id: action.id, title: action.title, filter: "all"}
       ];
     }
     case "CHANGE-TODOLIST-TITLE": {
-      const todoList = state.find(tl => tl.id === action.id);
-      if (todoList) {
-        todoList.title = action.title;
-      }
-      return [...state];
+      return state.map(tl => tl.id === action.id ? {...tl, title: action.title} : tl);
     }
     case "CHANGE-TODOLIST-FILTER": {
-      const todoList = state.find(tl => tl.id === action.id);
-      if (todoList) {
-        todoList.filter = action.filter;
-      }
-      return [...state];
+      return state.map(tl => tl.id === action.id ? {...tl, filter: action.filter} : tl);
     }
     default:
-      throw new Error("Invalid action type for todoListReducer");
+      return state;
   }
 };

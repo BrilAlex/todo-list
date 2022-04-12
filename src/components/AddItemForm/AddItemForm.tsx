@@ -40,6 +40,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
         error={!!error}
         helperText={error}
         size={"small"}
+        style={{marginBottom: "10px"}}
       />
       <IconButton onClick={addTask} color={"primary"}>
         <AddCircleOutline/>
