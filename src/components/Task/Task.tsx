@@ -6,9 +6,10 @@ import {TaskType} from "../../App";
 
 type TaskPropsType = {
   task: TaskType
-  changeTaskTitle: (task_ID: string, newTitle: string) => void
-  changeTaskStatus: (task_ID: string, newIsDone: boolean) => void
-  removeTask: (task_ID: string) => void
+  todoList_ID: string
+  changeTaskTitle: (todoList_ID: string, task_ID: string, newTitle: string) => void
+  changeTaskStatus: (todoList_ID: string, task_ID: string, isDone: boolean) => void
+  removeTask: (todoList_ID: string, task_ID: string) => void
 };
 
 export const Task = React.memo((props: TaskPropsType) => {
@@ -16,16 +17,16 @@ export const Task = React.memo((props: TaskPropsType) => {
   const {id, title, isDone} = props.task;
 
   const changeTaskTitle = useCallback((newTitle: string) => {
-    props.changeTaskTitle(id, newTitle);
-  }, [props.changeTaskTitle, id]);
+    props.changeTaskTitle(props.todoList_ID, id, newTitle);
+  }, [props.changeTaskTitle, props.todoList_ID, id]);
 
   const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    props.changeTaskStatus(id, e.currentTarget.checked);
-  }, [props.changeTaskStatus, id]);
+    props.changeTaskStatus(props.todoList_ID, id, e.currentTarget.checked);
+  }, [props.changeTaskStatus, props.todoList_ID, id]);
 
   const removeTask = useCallback(() => {
-    props.removeTask(id);
-  }, [props.removeTask, id]);
+    props.removeTask(props.todoList_ID, id);
+  }, [props.removeTask, props.todoList_ID, id]);
 
   return (
     <div>

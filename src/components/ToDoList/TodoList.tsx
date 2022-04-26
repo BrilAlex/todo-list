@@ -47,18 +47,6 @@ export const TodoList = React.memo((props: TodoListPropsType) => {
     props.addTask(props.id, title);
   }, [props.addTask, props.id]);
 
-  const changeTaskTitle = useCallback((task_ID: string, newTitle: string) => {
-    props.changeTaskTitle(props.id, task_ID, newTitle);
-  }, [props.changeTaskTitle, props.id]);
-
-  const changeTaskStatus = useCallback((task_ID: string, newIsDone: boolean) => {
-    props.changeTaskStatus(props.id, task_ID, newIsDone);
-  }, [props.changeTaskStatus, props.id]);
-
-  const removeTask = useCallback((task_ID: string) => {
-    props.removeTask(props.id, task_ID);
-  }, [props.removeTask, props.id]);
-
   return (
     <div>
       <h3>
@@ -73,9 +61,10 @@ export const TodoList = React.memo((props: TodoListPropsType) => {
           <Task
             key={t.id}
             task={t}
-            changeTaskTitle={changeTaskTitle}
-            changeTaskStatus={changeTaskStatus}
-            removeTask={removeTask}
+            todoList_ID={props.id}
+            changeTaskTitle={props.changeTaskTitle}
+            changeTaskStatus={props.changeTaskStatus}
+            removeTask={props.removeTask}
           />
         )}
       </div>
