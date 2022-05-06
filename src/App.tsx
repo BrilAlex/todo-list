@@ -7,34 +7,23 @@ import {Container, Grid, Paper} from "@mui/material";
 import {
   addTodoListAC,
   changeTodoListFilterAC,
-  changeTodoListTitleAC,
-  removeTodoListAC,
+  changeTodoListTitleAC, FilterValueType,
+  removeTodoListAC, TodoListDomainType,
 } from "./store/todoListsReducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./store/tasksReducer";
+import {
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+  TasksType
+} from "./store/tasksReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./store/store";
+import {TaskStatuses} from "./api/todoListsApi";
 
-export type FilterValueType = "all" | "active" | "completed";
-
-export type TaskType = {
-  id: string
-  title: string
-  isDone: boolean
-};
-
-export type TasksType = {
-  [todoList_ID: string]: Array<TaskType>
-}
-
-export type TodoListType = {
-  id: string
-  title: string
-  filter: FilterValueType
-};
 
 function App() {
-  console.log("App was called");
-  const todoLists = useSelector<AppStateType, Array<TodoListType>>(state => state.todoLists);
+  const todoLists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todoLists);
   const tasks = useSelector<AppStateType, TasksType>(state => state.tasks);
   const dispatch = useDispatch();
 
@@ -46,8 +35,8 @@ function App() {
     dispatch(changeTaskTitleAC(todoList_ID, task_ID, newTitle));
   }, [dispatch]);
 
-  const changeTaskStatus = useCallback((todoList_ID: string, task_ID: string, isDone: boolean) => {
-    dispatch(changeTaskStatusAC(todoList_ID, task_ID, isDone));
+  const changeTaskStatus = useCallback((todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
+    dispatch(changeTaskStatusAC(todoList_ID, task_ID, newStatus));
   }, [dispatch]);
 
   const removeTask = useCallback((todoList_ID: string, task_ID: string) => {
