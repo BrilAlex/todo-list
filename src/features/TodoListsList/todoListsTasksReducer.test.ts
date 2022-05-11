@@ -1,6 +1,6 @@
 import {tasksReducer, TasksType} from "./tasksReducer";
 import {addTodoListAC, TodoListDomainType, todoListsReducer} from "./todoListsReducer";
-import {TodoListType} from "../api/todoListsApi";
+import {TodoListType} from "../../api/todoListsApi";
 import {v1} from "uuid";
 
 test("Id should be equal", () => {

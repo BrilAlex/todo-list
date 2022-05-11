@@ -1,19 +1,18 @@
 import axios from "axios";
 
+// Types
 export type TodoListType = {
   id: string
   title: string
   addedDate: string
   order: number
 };
-
 export enum TaskStatuses {
   New = 0,
   InProgress = 1,
   Completed = 2,
   Draft = 3,
 }
-
 export enum TaskPriorities {
   Low = 0,
   Middle = 1,
@@ -21,7 +20,6 @@ export enum TaskPriorities {
   Urgent = 3,
   Later = 4,
 }
-
 export type TaskType = {
   todoListId: string
   id: string
@@ -34,7 +32,6 @@ export type TaskType = {
   addedDate: string
   order: number
 };
-
 export type UpdateTaskRequestDataType = {
   title: string
   description: string
@@ -43,32 +40,31 @@ export type UpdateTaskRequestDataType = {
   startDate: string
   deadline: string
 };
-
 type ResponseType<D = {}> = {
   data: D
   resultCode: number
   messages: Array<string>
   fieldsErrors: Array<string>
 };
-
 type GetTasksResponseType = {
   items: Array<TaskType>
   totalCount: number
   error: string
 };
 
+// Axios settings
 const settings = {
   withCredentials: true,
   headers: {
     "API-KEY": "07a6853a-00ae-46be-89bd-7635822fedbc",
   },
 };
-
 const axiosInstance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1/",
   ...settings,
 });
 
+// API
 export const todoListsAPI = {
   getTodoLists() {
     return axiosInstance
