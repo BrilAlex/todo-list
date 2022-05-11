@@ -35,11 +35,11 @@ export type TaskType = {
   order: number
 };
 
-type UpdateTaskRequestDataType = {
+export type UpdateTaskRequestDataType = {
   title: string
   description: string
-  status: number
-  priority: number
+  status: TaskStatuses
+  priority: TaskPriorities
   startDate: string
   deadline: string
 };
@@ -101,11 +101,11 @@ export const todoListsAPI = {
     return axiosInstance
       .delete<ResponseType>(`todo-lists/${todoList_ID}/tasks/${task_ID}`);
   },
-  updateTask(todoList_ID: string, task_ID: string, task: UpdateTaskRequestDataType) {
+  updateTask(todoList_ID: string, task_ID: string, taskModel: UpdateTaskRequestDataType) {
     return axiosInstance
       .put<ResponseType<{ item: TaskType }>>(
         `todo-lists/${todoList_ID}/tasks/${task_ID}`,
-        task,
+        taskModel,
       );
   },
 };

@@ -14,10 +14,8 @@ import {
 } from "./store/todoListsReducer";
 import {
   addTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
   removeTaskAC,
-  tasksReducer
+  tasksReducer, updateTaskAC
 } from "./store/tasksReducer";
 import {TaskPriorities, TaskStatuses} from "./api/todoListsApi";
 
@@ -89,15 +87,20 @@ function AppWithReducer() {
   });
 
   const addTask = (todoList_ID: string, title: string) => {
-    dispatchToTasks(addTaskAC(todoList_ID, title));
+    const newTask = {
+      id: v1(), title: title, todoListId: todoList_ID, description: "",
+      status: TaskStatuses.New, priority: TaskPriorities.Low,
+      startDate: "", deadline: "", addedDate: "", order: 0,
+    };
+    dispatchToTasks(addTaskAC(newTask));
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatchToTasks(changeTaskTitleAC(todoList_ID, task_ID, newTitle));
+    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {title: newTitle}));
   };
 
   const changeTaskStatus = (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatchToTasks(changeTaskStatusAC(todoList_ID, task_ID, newStatus));
+    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {status: newStatus}));
   };
 
   const removeTask = (todoList_ID: string, task_ID: string) => {
@@ -105,7 +108,8 @@ function AppWithReducer() {
   };
 
   const addTodoList = (title: string) => {
-    const action = addTodoListAC(title);
+    const newTodoList = {id: v1(), title, addedDate: "", order: 0};
+    const action = addTodoListAC(newTodoList);
     dispatchToTodoLists(action);
     dispatchToTasks(action);
   };
