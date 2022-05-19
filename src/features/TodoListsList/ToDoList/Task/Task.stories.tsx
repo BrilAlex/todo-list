@@ -27,7 +27,7 @@ TaskIsDone.args = {
   task: {
     id: "1", title: "HTML & CSS", todoListId: "todoList_ID1", description: "",
     status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-    startDate: "", deadline: "", addedDate: "", order: 0,
+    startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
   },
   todoList_ID: "todoList_ID1",
 };
@@ -38,7 +38,18 @@ TaskIsNotDone.args = {
   task: {
     id: "1", title: "React", todoListId: "todoList_ID2", description: "",
     status: TaskStatuses.New, priority: TaskPriorities.Low,
-    startDate: "", deadline: "", addedDate: "", order: 0,
+    startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
+  },
+  todoList_ID: "todoList_ID2",
+};
+
+export const TaskDisabled = Template.bind({});
+TaskDisabled.args = {
+  ...baseArgs,
+  task: {
+    id: "1", title: "JS", todoListId: "todoList_ID2", description: "",
+    status: TaskStatuses.New, priority: TaskPriorities.Low,
+    startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "loading",
   },
   todoList_ID: "todoList_ID2",
 };

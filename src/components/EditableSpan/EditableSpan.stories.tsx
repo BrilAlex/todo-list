@@ -23,3 +23,9 @@ export const EditableSpanExample = Template.bind({});
 EditableSpanExample.args = {
   setNewValue: action("EditableSpan value changed"),
 };
+
+export const EditableSpanDisabledExample = Template.bind({});
+EditableSpanDisabledExample.args = {
+  setNewValue: action("EditableSpan value changed"),
+  disabled: true,
+};

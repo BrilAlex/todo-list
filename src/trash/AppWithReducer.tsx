@@ -25,8 +25,22 @@ function AppWithReducer() {
   const todoList_ID2 = v1();
 
   const [todoLists, dispatchToTodoLists] = useReducer(todoListsReducer, [
-    {id: todoList_ID1, title: "What to Learn", addedDate: "", order: 0, filter: "all"},
-    {id: todoList_ID2, title: "What to Buy", addedDate: "", order: 1, filter: "all"},
+    {
+      id: todoList_ID1,
+      title: "What to Learn",
+      addedDate: "",
+      order: 0,
+      filter: "all",
+      entityStatus: "idle"
+    },
+    {
+      id: todoList_ID2,
+      title: "What to Buy",
+      addedDate: "",
+      order: 1,
+      filter: "all",
+      entityStatus: "idle"
+    },
   ]);
 
   const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
@@ -34,54 +48,54 @@ function AppWithReducer() {
       {
         id: v1(), title: "HTML&CSS", todoListId: todoList_ID1, description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "JS", todoListId: todoList_ID1, description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "ReactJS", todoListId: todoList_ID1, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Rest API", todoListId: todoList_ID1, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "GraphQL", todoListId: todoList_ID1, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
     [todoList_ID2]: [
       {
         id: v1(), title: "Bread", todoListId: todoList_ID2, description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Milk", todoListId: todoList_ID2, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Cheese", todoListId: todoList_ID2, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Salt", todoListId: todoList_ID2, description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Sugar", todoListId: todoList_ID2, description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
   });
@@ -150,10 +164,8 @@ function AppWithReducer() {
               <Grid key={tl.id} item>
                 <Paper elevation={5} style={{padding: "15px"}}>
                   <TodoList
-                    id={tl.id}
-                    title={tl.title}
+                    todoList={tl}
                     tasks={tasksForTodoList}
-                    filter={tl.filter}
                     addTask={addTask}
                     changeTaskTitle={changeTaskTitle}
                     changeTodoListTitle={changeTodoListTitle}

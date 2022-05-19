@@ -7,18 +7,25 @@ import {
   TodoListDomainType
 } from "./todoListsReducer";
 import {addTaskTC, removeTaskTC, TasksType, updateTaskTC} from "./tasksReducer";
-import React, {useCallback, useEffect} from "react";
+import React, {FC, useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/todoListsApi";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 
-export const TodoListsList = () => {
+type PropsType = {
+  demoMode?: boolean
+};
+
+export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   const todoLists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todoLists);
   const tasks = useSelector<AppStateType, TasksType>(state => state.tasks);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (demoMode) {
+      return;
+    }
     dispatch(fetchTodoListsTC());
   }, [dispatch]);
 
@@ -65,10 +72,8 @@ export const TodoListsList = () => {
             <Grid key={tl.id} item>
               <Paper elevation={5} style={{padding: "15px"}}>
                 <TodoList
-                  id={tl.id}
-                  title={tl.title}
+                  todoList={tl}
                   tasks={tasks[tl.id]}
-                  filter={tl.filter}
                   addTask={addTask}
                   changeTaskTitle={changeTaskTitle}
                   changeTodoListTitle={changeTodoListTitle}
@@ -76,6 +81,7 @@ export const TodoListsList = () => {
                   removeTask={removeTask}
                   changeFilter={changeFilter}
                   removeTodoList={removeTodoList}
+                  demoMode={demoMode}
                 />
               </Paper>
             </Grid>

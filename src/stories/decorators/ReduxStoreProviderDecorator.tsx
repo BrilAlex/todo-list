@@ -7,42 +7,62 @@ import {v1} from "uuid";
 import {AppStateType} from "../../app/store";
 import {TaskPriorities, TaskStatuses} from "../../api/todoListsApi";
 import thunk from "redux-thunk";
+import {appReducer} from "../../app/appReducer";
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
-  todoLists: todoListsReducer
+  todoLists: todoListsReducer,
+  app: appReducer,
 })
 
 const initialGlobalState: AppStateType = {
   todoLists: [
-    {id: "todolistId1", title: "What to Learn", addedDate: "", order: 0, filter: "all"},
-    {id: "todolistId2", title: "What to Buy", addedDate: "", order: 1, filter: "all"},
+    {
+      id: "todolistId1",
+      title: "What to Learn",
+      addedDate: "",
+      order: 0,
+      filter: "all",
+      entityStatus: "idle",
+    },
+    {
+      id: "todolistId2",
+      title: "What to Buy",
+      addedDate: "",
+      order: 1,
+      filter: "all",
+      entityStatus: "loading",
+    },
   ],
   tasks: {
     "todolistId1": [
       {
         id: v1(), title: "HTML&CSS", todoListId: "todolistId1", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "JS", todoListId: "todolistId1", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "loading",
       },
     ],
     "todolistId2": [
       {
         id: v1(), title: "Bread", todoListId: "todolistId2", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: v1(), title: "Milk", todoListId: "todolistId2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
+  },
+  app: {
+    status: "idle",
+    error: null,
   },
 };
 

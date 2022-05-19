@@ -16,34 +16,34 @@ beforeEach(() => {
       {
         id: "1", title: "HTML", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "2", title: "CSS", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "3", title: "React", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
     "todoList_ID2": [
       {
         id: "1", title: "Bread", todoListId: "todolist_ID2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "2", title: "Milk", todoListId: "todolist_ID2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "3", title: "Tea", todoListId: "todolist_ID2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
   };
@@ -61,29 +61,29 @@ test("Correct task should be deleted from correct array", () => {
       {
         id: "1", title: "HTML", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "2", title: "CSS", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "3", title: "React", todoListId: "todolist_ID1", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
     "todoList_ID2": [
       {
         id: "1", title: "Bread", todoListId: "todolist_ID2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
       {
         id: "3", title: "Tea", todoListId: "todolist_ID2", description: "",
         status: TaskStatuses.New, priority: TaskPriorities.Low,
-        startDate: "", deadline: "", addedDate: "", order: 0,
+        startDate: "", deadline: "", addedDate: "", order: 0, entityStatus: "idle",
       },
     ],
   });

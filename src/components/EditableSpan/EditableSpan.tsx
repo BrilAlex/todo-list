@@ -4,6 +4,7 @@ import {TextField} from "@mui/material";
 type EditableSpanPropsType = {
   value: string
   setNewValue: (value: string) => void
+  disabled?: boolean
 };
 
 export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
@@ -20,8 +21,10 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
   };
 
   const activateEditMode = () => {
-    setValue(props.value);
-    setEditMode(true);
+    if (!props.disabled) {
+      setValue(props.value);
+      setEditMode(true);
+    }
   };
 
   return (

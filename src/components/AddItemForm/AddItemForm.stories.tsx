@@ -19,3 +19,9 @@ export const AddItemFormExample = Template.bind({});
 AddItemFormExample.args = {
   addItem: action("Item added"),
 };
+
+export const AddItemFormDisabledExample = Template.bind({});
+AddItemFormDisabledExample.args = {
+  addItem: action("Item added"),
+  disabled: true,
+};
