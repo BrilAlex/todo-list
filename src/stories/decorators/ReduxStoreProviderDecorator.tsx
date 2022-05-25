@@ -61,8 +61,12 @@ const initialGlobalState: AppStateType = {
     ],
   },
   app: {
+    isInitialized: false,
     status: "idle",
     error: null,
+  },
+  auth: {
+    isLoggedIn: false,
   },
 };
 

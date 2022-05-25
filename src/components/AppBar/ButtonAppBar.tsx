@@ -1,12 +1,20 @@
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import LinearProgress from '@mui/material/LinearProgress';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {RequestStatusType} from "../../app/appReducer";
+import {logoutTC} from "../../features/Login/authReducer";
+import {useCallback} from "react";
 
 export const ButtonAppBar = () => {
   const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status);
+  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
+  const logoutHandler = useCallback(() => {
+    dispatch(logoutTC());
+  }, [dispatch]);
 
   return (
     <Box sx={{flexGrow: 1}}>
@@ -24,10 +32,10 @@ export const ButtonAppBar = () => {
           <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
             News
           </Typography>
-          <Button color="inherit">Login</Button>
+          {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Logout</Button>}
         </Toolbar>
         {status === "loading" && <LinearProgress/>}
       </AppBar>
     </Box>
   );
-}
+};

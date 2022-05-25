@@ -12,22 +12,24 @@ import {TaskStatuses} from "../../api/todoListsApi";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
+import {Navigate} from "react-router-dom";
 
 type PropsType = {
   demoMode?: boolean
 };
 
 export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
+  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
   const todoLists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todoLists);
   const tasks = useSelector<AppStateType, TasksType>(state => state.tasks);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (demoMode) {
+    if (demoMode || !isLoggedIn) {
       return;
     }
     dispatch(fetchTodoListsTC());
-  }, [dispatch]);
+  }, [dispatch, demoMode, isLoggedIn]);
 
   const addTask = useCallback((todoList_ID: string, title: string) => {
     dispatch(addTaskTC(todoList_ID, title));
@@ -61,6 +63,11 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   const removeTodoList = useCallback((todoList_ID: string) => {
     dispatch(removeTodoListTC(todoList_ID));
   }, [dispatch]);
+
+  if (!isLoggedIn) {
+    return <Navigate to={"/login"}/>;
+  }
+
   return (
     <>
       <Grid container style={{padding: "20px"}}>

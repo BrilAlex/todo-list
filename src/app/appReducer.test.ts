@@ -10,6 +10,7 @@ let startState: initStateType;
 
 beforeEach(() => {
   startState = {
+    isInitialized: false,
     status: "idle",
     error: null,
   };
