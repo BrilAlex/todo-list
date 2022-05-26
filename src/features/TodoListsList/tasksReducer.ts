@@ -1,5 +1,5 @@
 import {
-  AddTodoListActionType,
+  AddTodoListActionType, ClearTodoListsDataActionType,
   RemoveTodoListActionType,
   SetTodoListsActionType
 } from "./todoListsReducer";
@@ -33,7 +33,7 @@ export type UpdateDomainTaskModelType = {
   startDate?: string
   deadline?: string
 };
-type ActionsType =
+export type TasksActionsType =
   | ReturnType<typeof removeTaskAC>
   | ReturnType<typeof addTaskAC>
   | ReturnType<typeof updateTaskAC>
@@ -41,8 +41,9 @@ type ActionsType =
   | RemoveTodoListActionType
   | SetTodoListsActionType
   | ReturnType<typeof setTasksAC>
-  | ReturnType<typeof changeTaskEntityStatusAC>;
-type ThunkDispatchType = Dispatch<ActionsType | SetAppStatusActionType | SetAppErrorActionType>;
+  | ReturnType<typeof changeTaskEntityStatusAC>
+  | ClearTodoListsDataActionType;
+type ThunkDispatchType = Dispatch<TasksActionsType | SetAppStatusActionType | SetAppErrorActionType>;
 
 // Initial state
 const initState: TasksType = {};
@@ -133,7 +134,7 @@ export const updateTaskTC = (todoList_ID: string, task_ID: string, domainModel: 
     }
   };
 
-export const tasksReducer = (state: TasksType = initState, action: ActionsType): TasksType => {
+export const tasksReducer = (state: TasksType = initState, action: TasksActionsType): TasksType => {
   switch (action.type) {
     case "SET-TODOLISTS": {
       const stateCopy = {...state};
@@ -177,6 +178,8 @@ export const tasksReducer = (state: TasksType = initState, action: ActionsType):
       delete stateCopy[action.id];
       return stateCopy;
     }
+    case "CLEAR-TODOLISTS-DATA":
+      return {};
     default:
       return state;
   }

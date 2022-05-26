@@ -1,11 +1,12 @@
-import {Dispatch} from "redux";
 import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../../app/appReducer";
 import {authAPI, LoginParamsType} from "../../api/todoListsApi";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
+import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
+import {RootThunkType} from "../../app/store";
 
 
 // Types
-type ActionsType =
+export type AuthActionsType =
   | ReturnType<typeof setIsLoggedInAC>
   | SetAppStatusActionType
   | SetAppErrorActionType;
@@ -21,7 +22,7 @@ export const setIsLoggedInAC = (value: boolean) =>
   ({type: "login/SET-IS-LOGGED-IN", value} as const);
 
 // Thunk Creators
-export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsType>) => {
+export const loginTC = (data: LoginParamsType): RootThunkType => (dispatch) => {
   dispatch(setAppStatusAC("loading"));
   authAPI.login(data)
     .then(response => {
@@ -36,11 +37,12 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsTyp
       handleServerNetworkError(error, dispatch);
     });
 };
-export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
+export const logoutTC = (): RootThunkType => (dispatch) => {
   dispatch(setAppStatusAC("loading"));
   authAPI.logout()
     .then(response => {
       if (response.data.resultCode === 0) {
+        dispatch(clearTodoListsDataAC());
         dispatch(setIsLoggedInAC(false));
         dispatch(setAppStatusAC("succeeded"));
       } else {
@@ -52,7 +54,7 @@ export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
     });
 };
 
-export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+export const authReducer = (state: InitialStateType = initialState, action: AuthActionsType): InitialStateType => {
   switch (action.type) {
     case "login/SET-IS-LOGGED-IN":
       return {...state, isLoggedIn: action.value};
