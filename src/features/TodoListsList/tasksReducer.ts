@@ -59,8 +59,8 @@ const slice = createSlice({
       const index = tasks.findIndex(t => t.id === action.payload.task_ID);
       if (index > -1) tasks.splice(index, 1);
     },
-    addTaskAC(state, action: PayloadAction<{task: TaskType}>) {
-      state[action.payload.task.todoListId].unshift({...action.payload.task, entityStatus: "idle"});
+    addTaskAC(state, action: PayloadAction<TaskType>) {
+      state[action.payload.todoListId].unshift({...action.payload, entityStatus: "idle"});
     },
     updateTaskAC(state, action: PayloadAction<{todoList_ID: string, task_ID: string, model: UpdateDomainTaskModelType}>) {
       const tasks = state[action.payload.todoList_ID];
@@ -140,7 +140,7 @@ export const addTaskTC = (todoList_ID: string, title: string) => (dispatch: Thun
     .then(response => {
       if (response.data.resultCode === 0) {
         const newTask = response.data.data.item;
-        dispatch(addTaskAC({task: newTask}));
+        dispatch(addTaskAC(newTask));
         dispatch(setAppStatusAC({status: "succeeded"}));
       } else {
         handleServerAppError(response.data, dispatch);

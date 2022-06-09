@@ -102,7 +102,7 @@ test("Correct task should be added to correct array", () => {
     addedDate: "",
     order: 0,
   };
-  const action = addTaskAC({task: newTask});
+  const action = addTaskAC(newTask);
   const endState = tasksReducer(startState, action);
 
   expect(endState["todoList_ID1"].length).toBe(3);
@@ -116,7 +116,7 @@ test("Status of specified task should be changed", () => {
   const action = updateTaskAC({
     todoList_ID: "todoList_ID2",
     task_ID: "2",
-    model: {status: TaskStatuses.New}
+    model: {status: TaskStatuses.New},
   });
   const endState = tasksReducer(startState, action);
 
@@ -128,7 +128,7 @@ test("Title of specified task should be changed", () => {
   const action = updateTaskAC({
     todoList_ID: "todoList_ID2",
     task_ID: "2",
-    model: {title: "Coffee"}
+    model: {title: "Coffee"},
   });
   const endState = tasksReducer(startState, action);
 

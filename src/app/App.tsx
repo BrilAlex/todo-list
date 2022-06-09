@@ -4,7 +4,7 @@ import {ButtonAppBar} from "../components/AppBar/ButtonAppBar";
 import {CircularProgress, Container} from "@mui/material";
 import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
 import {useDispatch, useSelector} from "react-redux";
 import {initializeAppTC} from "./appReducer";
@@ -19,8 +19,10 @@ function App({demoMode = false}: PropsType) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initializeAppTC());
-  }, [dispatch]);
+    if (!demoMode) {
+      dispatch(initializeAppTC());
+    }
+  }, [dispatch, demoMode]);
 
   if (!isInitialized) {
     return (
@@ -31,20 +33,18 @@ function App({demoMode = false}: PropsType) {
   }
 
   return (
-    <BrowserRouter>
-      <div className="App">
-        <ErrorSnackbar/>
-        <ButtonAppBar/>
-        <Container fixed>
-          <Routes>
-            <Route path={"/"} element={<TodoListsList demoMode={demoMode}/>}/>
-            <Route path={"/login"} element={<Login/>}/>
-            <Route path={"/error404"} element={<h1>Error 404: Page not found</h1>}/>
-            <Route path={"*"} element={<Navigate to={"/error404"}/>}/>
-          </Routes>
-        </Container>
-      </div>
-    </BrowserRouter>
+    <div className="App">
+      <ErrorSnackbar/>
+      <ButtonAppBar/>
+      <Container fixed>
+        <Routes>
+          <Route path={"/"} element={<TodoListsList demoMode={demoMode}/>}/>
+          <Route path={"/login"} element={<Login/>}/>
+          <Route path={"/error404"} element={<h1>Error 404: Page not found</h1>}/>
+          <Route path={"*"} element={<Navigate to={"/error404"}/>}/>
+        </Routes>
+      </Container>
+    </div>
   );
 }
 

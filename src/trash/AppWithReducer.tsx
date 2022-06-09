@@ -106,7 +106,7 @@ function AppWithReducer() {
       status: TaskStatuses.New, priority: TaskPriorities.Low,
       startDate: "", deadline: "", addedDate: "", order: 0,
     };
-    dispatchToTasks(addTaskAC({task: newTask}));
+    dispatchToTasks(addTaskAC(newTask));
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
