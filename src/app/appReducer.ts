@@ -1,9 +1,10 @@
-// Types
 import {setIsLoggedInAC} from "../features/Login/authReducer";
 import {authAPI} from "../api/todoListsApi";
 import {Dispatch} from "redux";
 import {handleServerAppError, handleServerNetworkError} from "../utils/errorUtils";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
+// Types
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 export type initStateType = typeof initState;
 export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>;
@@ -18,39 +19,39 @@ const initState = {
   error: null as string | null,
 };
 
+const slice = createSlice({
+  name: "app",
+  initialState: initState,
+  reducers: {
+    setIsInitializedAC(state, action: PayloadAction<{isInitialized: boolean}>) {
+      state.isInitialized = action.payload.isInitialized;
+    },
+    setAppStatusAC(state, action: PayloadAction<{status: RequestStatusType}>) {
+      state.status = action.payload.status;
+    },
+    setAppErrorAC(state, action: PayloadAction<{error: string | null}>) {
+      state.error = action.payload.error;
+    },
+  },
+});
+
+export const appReducer = slice.reducer;
+
 // Action Creators
-export const setIsInitializedAC = (value: boolean) =>
-  ({type: "APP/SET-IS-INITIALIZED", value} as const);
-export const setAppStatusAC = (status: RequestStatusType) =>
-  ({type: "APP/SET-STATUS", status} as const);
-export const setAppErrorAC = (error: string | null) =>
-  ({type: "APP/SET-ERROR", error} as const);
+export const {setIsInitializedAC, setAppStatusAC, setAppErrorAC} = slice.actions;
 
 // Thunk Creators
 export const initializeAppTC = () => (dispatch: Dispatch) => {
   authAPI.me()
     .then(response => {
       if (response.data.resultCode === 0) {
-        dispatch(setIsLoggedInAC(true));
+        dispatch(setIsLoggedInAC({value: true}));
       } else {
         handleServerAppError(response.data, dispatch);
       }
-      dispatch(setIsInitializedAC(true));
+      dispatch(setIsInitializedAC({isInitialized: true}));
     })
     .catch(error => {
       handleServerNetworkError(error, dispatch);
     });
-};
-
-export const appReducer = (state: initStateType = initState, action: ActionsType): initStateType => {
-  switch (action.type) {
-    case "APP/SET-IS-INITIALIZED":
-      return {...state, isInitialized: action.value};
-    case "APP/SET-STATUS":
-      return {...state, status: action.status};
-    case "APP/SET-ERROR":
-      return {...state, error: action.error};
-    default:
-      return state;
-  }
 };

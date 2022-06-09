@@ -57,7 +57,7 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   }, [dispatch]);
 
   const changeFilter = useCallback((todoList_ID: string, filterValue: FilterValueType) => {
-    dispatch(changeTodoListFilterAC(todoList_ID, filterValue));
+    dispatch(changeTodoListFilterAC({id: todoList_ID, filter: filterValue}));
   }, [dispatch]);
 
   const removeTodoList = useCallback((todoList_ID: string) => {

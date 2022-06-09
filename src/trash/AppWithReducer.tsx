@@ -106,39 +106,39 @@ function AppWithReducer() {
       status: TaskStatuses.New, priority: TaskPriorities.Low,
       startDate: "", deadline: "", addedDate: "", order: 0,
     };
-    dispatchToTasks(addTaskAC(newTask));
+    dispatchToTasks(addTaskAC({task: newTask}));
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {title: newTitle}));
+    dispatchToTasks(updateTaskAC({todoList_ID, task_ID, model: {title: newTitle}}));
   };
 
   const changeTaskStatus = (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {status: newStatus}));
+    dispatchToTasks(updateTaskAC({todoList_ID, task_ID, model: {status: newStatus}}));
   };
 
   const removeTask = (todoList_ID: string, task_ID: string) => {
-    dispatchToTasks(removeTaskAC(todoList_ID, task_ID));
+    dispatchToTasks(removeTaskAC({todoList_ID, task_ID}));
   };
 
   const addTodoList = (title: string) => {
     const newTodoList = {id: v1(), title, addedDate: "", order: 0};
-    const action = addTodoListAC(newTodoList);
+    const action = addTodoListAC({todoList: newTodoList});
     dispatchToTodoLists(action);
     dispatchToTasks(action);
   };
 
   const changeTodoListTitle = (todoList_ID: string, newTitle: string) => {
-    dispatchToTodoLists(changeTodoListTitleAC(todoList_ID, newTitle));
+    dispatchToTodoLists(changeTodoListTitleAC({id: todoList_ID, title: newTitle}));
   };
 
   const changeFilter = (todoList_ID: string, filterValue: FilterValueType) => {
-    dispatchToTodoLists(changeTodoListFilterAC(todoList_ID, filterValue));
+    dispatchToTodoLists(changeTodoListFilterAC({id: todoList_ID, filter: filterValue}));
   };
 
   const removeTodoList = (todoList_ID: string) => {
-    dispatchToTodoLists(removeTodoListAC(todoList_ID));
-    dispatchToTasks(removeTodoListAC(todoList_ID));
+    dispatchToTodoLists(removeTodoListAC({id: todoList_ID}));
+    dispatchToTasks(removeTodoListAC({id: todoList_ID}));
   };
 
   return (
