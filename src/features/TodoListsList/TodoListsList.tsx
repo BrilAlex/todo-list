@@ -32,19 +32,19 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   }, [dispatch, demoMode, isLoggedIn]);
 
   const addTask = useCallback((todoList_ID: string, title: string) => {
-    dispatch(addTaskTC(todoList_ID, title));
+    dispatch(addTaskTC({todoList_ID, title}));
   }, [dispatch]);
 
   const changeTaskTitle = useCallback((todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatch(updateTaskTC(todoList_ID, task_ID, {title: newTitle}));
+    dispatch(updateTaskTC({todoList_ID, task_ID, model: {title: newTitle}}));
   }, [dispatch]);
 
   const changeTaskStatus = useCallback((todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatch(updateTaskTC(todoList_ID, task_ID, {status: newStatus}));
+    dispatch(updateTaskTC({todoList_ID, task_ID, model: {status: newStatus}}));
   }, [dispatch]);
 
   const removeTask = useCallback((todoList_ID: string, task_ID: string) => {
-    const thunk = removeTaskTC(todoList_ID, task_ID);
+    const thunk = removeTaskTC({todoList_ID, task_ID});
     dispatch(thunk);
   }, [dispatch]);
 
@@ -53,7 +53,7 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   }, [dispatch]);
 
   const changeTodoListTitle = useCallback((todoList_ID: string, newTitle: string) => {
-    dispatch(changeTodoListTitleTC(todoList_ID, newTitle));
+    dispatch(changeTodoListTitleTC({todoList_ID, newTitle}));
   }, [dispatch]);
 
   const changeFilter = useCallback((todoList_ID: string, filterValue: FilterValueType) => {

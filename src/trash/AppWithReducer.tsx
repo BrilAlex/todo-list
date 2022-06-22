@@ -6,16 +6,15 @@ import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {ButtonAppBar} from "../components/AppBar/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {
-  addTodoListAC,
-  changeTodoListFilterAC,
-  changeTodoListTitleAC, FilterValueType,
-  removeTodoListAC,
+  addTodoListTC,
+  changeTodoListFilterAC, changeTodoListTitleTC,
+  FilterValueType, removeTodoListTC,
   todoListsReducer
 } from "../features/TodoListsList/todoListsReducer";
 import {
-  addTaskAC,
-  removeTaskAC,
-  tasksReducer, updateTaskAC
+  addTaskTC,
+  removeTaskTC,
+  tasksReducer, updateTaskTC
 } from "../features/TodoListsList/tasksReducer";
 import {TaskPriorities, TaskStatuses} from "../api/todoListsApi";
 
@@ -106,30 +105,41 @@ function AppWithReducer() {
       status: TaskStatuses.New, priority: TaskPriorities.Low,
       startDate: "", deadline: "", addedDate: "", order: 0,
     };
-    dispatchToTasks(addTaskAC(newTask));
+    const params = {todoList_ID: newTask.todoListId, title: newTask.title};
+    dispatchToTasks(addTaskTC.fulfilled(newTask, "request_ID", params));
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatchToTasks(updateTaskAC({todoList_ID, task_ID, model: {title: newTitle}}));
+    const params = {todoList_ID, task_ID, model: {title: newTitle}}
+    dispatchToTasks(updateTaskTC.fulfilled(params, "request_ID", params));
   };
 
   const changeTaskStatus = (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatchToTasks(updateTaskAC({todoList_ID, task_ID, model: {status: newStatus}}));
+    const params = {todoList_ID, task_ID, model: {status: newStatus}}
+    dispatchToTasks(updateTaskTC.fulfilled(params, "request_ID", params));
   };
 
   const removeTask = (todoList_ID: string, task_ID: string) => {
-    dispatchToTasks(removeTaskAC({todoList_ID, task_ID}));
+    dispatchToTasks(removeTaskTC.fulfilled(
+      {todoList_ID, task_ID},
+      "request_ID",
+      {todoList_ID, task_ID}
+    ));
   };
 
   const addTodoList = (title: string) => {
     const newTodoList = {id: v1(), title, addedDate: "", order: 0};
-    const action = addTodoListAC({todoList: newTodoList});
+    const action = addTodoListTC.fulfilled({todoList: newTodoList}, "request_ID", title);
     dispatchToTodoLists(action);
     dispatchToTasks(action);
   };
 
   const changeTodoListTitle = (todoList_ID: string, newTitle: string) => {
-    dispatchToTodoLists(changeTodoListTitleAC({id: todoList_ID, title: newTitle}));
+    dispatchToTodoLists(changeTodoListTitleTC.fulfilled(
+      {id: todoList_ID, title: newTitle},
+      "request_ID",
+      {todoList_ID, newTitle}
+    ));
   };
 
   const changeFilter = (todoList_ID: string, filterValue: FilterValueType) => {
@@ -137,8 +147,9 @@ function AppWithReducer() {
   };
 
   const removeTodoList = (todoList_ID: string) => {
-    dispatchToTodoLists(removeTodoListAC({id: todoList_ID}));
-    dispatchToTasks(removeTodoListAC({id: todoList_ID}));
+    const action = removeTodoListTC.fulfilled({id: todoList_ID}, "request_ID", todoList_ID);
+    dispatchToTodoLists(action);
+    dispatchToTasks(action);
   };
 
   return (
