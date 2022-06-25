@@ -1,6 +1,6 @@
 import {todoListsAPI} from "../../api/todoListsApi";
 import {TodoListType} from "../../api/types";
-import {RequestStatusType, setAppStatusAC} from "../../app/appReducer";
+import {RequestStatusType, setAppStatusAC} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {fetchTasksTC} from "./tasksReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";

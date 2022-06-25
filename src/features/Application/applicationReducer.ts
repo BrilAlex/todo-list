@@ -1,6 +1,6 @@
-import {setIsLoggedInAC} from "../features/Login/authReducer";
-import {authAPI} from "../api/todoListsApi";
-import {handleServerAppError, handleServerNetworkError} from "../utils/errorUtils";
+import {setIsLoggedInAC} from "../Auth/authReducer";
+import {authAPI} from "../../api/todoListsApi";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 // Types
@@ -57,7 +57,7 @@ const slice = createSlice({
 });
 
 // Reducer
-export const appReducer = slice.reducer;
+export const applicationReducer = slice.reducer;
 
 // Action Creators
 export const {setAppStatusAC, setAppErrorAC} = slice.actions;

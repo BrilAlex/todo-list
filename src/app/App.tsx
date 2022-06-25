@@ -5,17 +5,17 @@ import {CircularProgress, Container} from "@mui/material";
 import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "../features/Login/Login";
+import {Login} from "../features/Auth/Login";
 import {useDispatch, useSelector} from "react-redux";
-import {initializeAppTC} from "./appReducer";
-import {AppStateType} from "./store";
+import {initializeAppTC} from "../features/Application/applicationReducer";
+import {selectAppIsInitialized} from "../features/Application/selectors";
 
 type PropsType = {
   demoMode?: boolean
 };
 
 function App({demoMode = false}: PropsType) {
-  const isInitialized = useSelector<AppStateType, boolean>(state => state.app.isInitialized);
+  const isInitialized = useSelector(selectAppIsInitialized);
   const dispatch = useDispatch();
 
   useEffect(() => {

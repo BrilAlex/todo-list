@@ -1,4 +1,4 @@
-import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../../app/appReducer";
+import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../Application/applicationReducer";
 import {authAPI} from "../../api/todoListsApi";
 import {FieldErrorType, LoginParamsType} from "../../api/types";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";

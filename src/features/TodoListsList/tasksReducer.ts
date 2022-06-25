@@ -15,7 +15,7 @@ import {AppStateType} from "../../app/store";
 import {
   RequestStatusType,
   setAppStatusAC,
-} from "../../app/appReducer";
+} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 

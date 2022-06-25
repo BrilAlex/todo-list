@@ -2,8 +2,8 @@ import {combineReducers} from "redux";
 import {TodoListsActionsType, todoListsReducer} from "../features/TodoListsList/todoListsReducer";
 import {TasksActionsType, tasksReducer} from "../features/TodoListsList/tasksReducer";
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
-import {AppActionsType, appReducer} from "./appReducer";
-import {AuthActionsType, authReducer} from "../features/Login/authReducer";
+import {AppActionsType, applicationReducer} from "../features/Application/applicationReducer";
+import {AuthActionsType, authReducer} from "../features/Auth/authReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 
@@ -20,7 +20,7 @@ type AppDispatchType = typeof store.dispatch;
 const rootReducer = combineReducers({
   todoLists: todoListsReducer,
   tasks: tasksReducer,
-  app: appReducer,
+  app: applicationReducer,
   auth: authReducer,
 });
 

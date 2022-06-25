@@ -2,14 +2,14 @@ import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/materia
 import {Menu} from "@mui/icons-material";
 import LinearProgress from '@mui/material/LinearProgress';
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../app/store";
-import {RequestStatusType} from "../../app/appReducer";
-import {logoutTC} from "../../features/Login/authReducer";
+import {logoutTC} from "../../features/Auth/authReducer";
 import {useCallback} from "react";
+import {selectAppStatus} from "../../features/Application/selectors";
+import {selectIsLoggedIn} from "../../features/Auth/selectors";
 
 export const ButtonAppBar = () => {
-  const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status);
-  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
+  const status = useSelector(selectAppStatus);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
 
   const logoutHandler = useCallback(() => {

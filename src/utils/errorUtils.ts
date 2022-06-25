@@ -2,7 +2,7 @@ import {
   setAppErrorAC, SetAppErrorActionType,
   setAppStatusAC,
   SetAppStatusActionType
-} from "../app/appReducer";
+} from "../features/Application/applicationReducer";
 import {Dispatch} from "redux";
 import {ResponseType} from "../api/types";
 
