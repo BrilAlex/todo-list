@@ -16,7 +16,7 @@ import {
   removeTaskTC,
   tasksReducer, updateTaskTC
 } from "../features/TodoListsList/tasksReducer";
-import {TaskPriorities, TaskStatuses} from "../api/todoListsApi";
+import {TaskPriorities, TaskStatuses} from "../api/types";
 
 
 function AppWithReducer() {

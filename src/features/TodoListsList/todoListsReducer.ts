@@ -1,4 +1,5 @@
-import {todoListsAPI, TodoListType} from "../../api/todoListsApi";
+import {todoListsAPI} from "../../api/todoListsApi";
+import {TodoListType} from "../../api/types";
 import {RequestStatusType, setAppStatusAC} from "../../app/appReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {fetchTasksTC} from "./tasksReducer";

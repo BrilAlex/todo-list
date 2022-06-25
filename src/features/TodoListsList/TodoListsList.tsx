@@ -8,7 +8,7 @@ import {
 } from "./todoListsReducer";
 import {addTaskTC, removeTaskTC, TasksType, updateTaskTC} from "./tasksReducer";
 import React, {FC, useCallback, useEffect} from "react";
-import {TaskStatuses} from "../../api/todoListsApi";
+import {TaskStatuses} from "../../api/types";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";

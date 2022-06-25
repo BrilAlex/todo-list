@@ -1,5 +1,6 @@
 import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../../app/appReducer";
-import {authAPI, FieldErrorType, LoginParamsType} from "../../api/todoListsApi";
+import {authAPI} from "../../api/todoListsApi";
+import {FieldErrorType, LoginParamsType} from "../../api/types";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";

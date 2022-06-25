@@ -5,7 +5,7 @@ import {
   TasksType, updateTaskTC
 } from "./tasksReducer";
 import {addTodoListTC, fetchTodoListsTC, removeTodoListTC} from "./todoListsReducer";
-import {TaskPriorities, TaskStatuses, TaskType, TodoListType} from "../../api/todoListsApi";
+import {TaskPriorities, TaskStatuses, TaskType, TodoListType} from "../../api/types";
 import {v1} from "uuid";
 
 let startState: TasksType;

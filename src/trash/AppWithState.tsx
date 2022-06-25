@@ -7,7 +7,7 @@ import {ButtonAppBar} from "../components/AppBar/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {FilterValueType, TodoListDomainType} from "../features/TodoListsList/todoListsReducer";
 import {TaskDomainType, TasksType} from "../features/TodoListsList/tasksReducer";
-import {TaskPriorities, TaskStatuses, TaskType} from "../api/todoListsApi";
+import {TaskPriorities, TaskStatuses} from "../api/types";
 
 
 function AppWithState() {

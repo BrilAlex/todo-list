@@ -4,13 +4,13 @@ import {
   ClearTodoListsDataActionType,
   fetchTodoListsTC, removeTodoListTC
 } from "./todoListsReducer";
+import {todoListsAPI} from "../../api/todoListsApi";
 import {
   TaskPriorities,
   TaskStatuses,
   TaskType,
-  todoListsAPI,
   UpdateTaskRequestDataType
-} from "../../api/todoListsApi";
+} from "../../api/types";
 import {AppStateType} from "../../app/store";
 import {
   RequestStatusType,
