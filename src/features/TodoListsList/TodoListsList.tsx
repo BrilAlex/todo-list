@@ -11,7 +11,7 @@ import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 import {Navigate} from "react-router-dom";
-import {selectIsLoggedIn} from "../Auth/selectors";
+import {authSelectors} from "../Auth";
 import {selectTasks, selectTodoLists} from "./selectors";
 
 type PropsType = {
@@ -19,7 +19,7 @@ type PropsType = {
 };
 
 export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
   const todoLists = useSelector(selectTodoLists);
   const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();

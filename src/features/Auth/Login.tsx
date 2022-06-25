@@ -9,10 +9,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {FormikHelpers, useFormik} from "formik";
 import {useSelector} from "react-redux";
-import {loginTC} from "./authReducer";
 import {Navigate} from "react-router-dom";
-import {AppStateType} from "../../utils/types";
 import {useAppDispatch} from "../../utils/reduxUtils";
+import {authActions, authSelectors} from "./index";
 
 type FormValuesType = {
   email: string
@@ -23,7 +22,7 @@ type FormValuesType = {
 type FormikErrorType = Partial<FormValuesType>;
 
 export const Login = () => {
-  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
   const dispatch = useAppDispatch();
 
   const formik = useFormik({
@@ -47,8 +46,8 @@ export const Login = () => {
       return errors;
     },
     onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-      const action = await dispatch(loginTC(values));
-      if (loginTC.rejected.match(action)) {
+      const action = await dispatch(authActions.login(values));
+      if (authActions.login.rejected.match(action)) {
         if (action.payload?.fieldsErrors?.length) {
           const error = action.payload.fieldsErrors[0];
           formikHelpers.setFieldError(error.field, error.error);

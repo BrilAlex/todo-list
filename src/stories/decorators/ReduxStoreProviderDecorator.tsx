@@ -5,7 +5,7 @@ import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses} from "../../api/types";
 import thunk from "redux-thunk";
 import {appReducer} from "../../features/Application";
-import {authReducer} from "../../features/Auth/authReducer";
+import {authReducer} from "../../features/Auth";
 import {tasksReducer} from "../../features/TodoListsList/tasksReducer";
 import {todoListsReducer} from "../../features/TodoListsList/todoListsReducer";
 import {configureStore} from "@reduxjs/toolkit";

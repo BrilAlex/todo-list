@@ -1,8 +1,8 @@
-import {setIsLoggedInAC} from "../Auth/authReducer";
 import {authAPI} from "../../api/todoListsApi";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {commonAppActions} from "../CommonActions/app";
+import {authActions} from "../Auth";
 
 // Types
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
@@ -15,6 +15,9 @@ export type InitStateType = {
 // Common App actions
 const {setAppStatus, setAppError} = commonAppActions;
 
+// Auth actions
+const {setIsLoggedIn} = authActions;
+
 // Thunk Creators
 const initializeApp = createAsyncThunk("app/initializeApp", async (
   params, {dispatch, rejectWithValue}
@@ -22,7 +25,7 @@ const initializeApp = createAsyncThunk("app/initializeApp", async (
   try {
     const response = await authAPI.me();
     if (response.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC({value: true}));
+      dispatch(setIsLoggedIn({value: true}));
     } else {
       handleServerAppError(response.data, dispatch);
     }

@@ -5,20 +5,17 @@ import {CircularProgress, Container} from "@mui/material";
 import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "../features/Auth/Login";
+import {Login} from "../features/Auth";
 import {useSelector} from "react-redux";
-import {selectAppIsInitialized} from "../features/Application/selectors";
 import {useActions} from "../utils/reduxUtils";
-import {appActions} from "../features/Application";
-
-
+import {appActions, appSelectors} from "../features/Application";
 
 type PropsType = {
   demoMode?: boolean
 };
 
 function App({demoMode = false}: PropsType) {
-  const isInitialized = useSelector(selectAppIsInitialized);
+  const isInitialized = useSelector(appSelectors.selectAppIsInitialized);
   const {initializeApp} = useActions(appActions);
 
   useEffect(() => {

@@ -6,10 +6,11 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ThunkErrorType} from "../../utils/types";
 import {commonAppActions} from "../CommonActions/app";
 
+// Common App actions
 const {setAppStatus} = commonAppActions;
 
 // Thunk Creators
-export const loginTC = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
+const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
   "auth/login", async (params, thunkAPI
   ) => {
     thunkAPI.dispatch(setAppStatus({status: "loading"}));
@@ -33,7 +34,7 @@ export const loginTC = createAsyncThunk<undefined, LoginParamsType, ThunkErrorTy
       });
     }
   });
-export const logoutTC = createAsyncThunk("auth/logout", async (params, thunkAPI) => {
+const logout = createAsyncThunk("auth/logout", async (params, thunkAPI) => {
   thunkAPI.dispatch(setAppStatus({status: "loading"}));
   try {
     const response = await authAPI.logout();
@@ -51,29 +52,29 @@ export const logoutTC = createAsyncThunk("auth/logout", async (params, thunkAPI)
   }
 });
 
+export const asyncAuthActions = {
+  login,
+  logout,
+};
+
 // Slice
-const slice = createSlice({
-  name: "app",
+export const authSlice = createSlice({
+  name: "auth",
   initialState: {
     isLoggedIn: false,
   },
   reducers: {
-    setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
+    setIsLoggedIn(state, action: PayloadAction<{ value: boolean }>) {
       state.isLoggedIn = action.payload.value;
     },
   },
   extraReducers: builder => {
-    builder.addCase(loginTC.fulfilled, (state) => {
-      state.isLoggedIn = true;
-    });
-    builder.addCase(logoutTC.fulfilled, (state) => {
-      state.isLoggedIn = false;
-    });
+    builder
+      .addCase(login.fulfilled, (state) => {
+        state.isLoggedIn = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.isLoggedIn = false;
+      });
   },
 });
-
-// Reducer
-export const authReducer = slice.reducer;
-
-// Action Creators
-export const setIsLoggedInAC = slice.actions.setIsLoggedInAC;

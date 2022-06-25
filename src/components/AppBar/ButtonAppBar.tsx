@@ -1,20 +1,20 @@
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import LinearProgress from '@mui/material/LinearProgress';
-import {useDispatch, useSelector} from "react-redux";
-import {logoutTC} from "../../features/Auth/authReducer";
+import {useSelector} from "react-redux";
 import {useCallback} from "react";
-import {selectAppStatus} from "../../features/Application/selectors";
-import {selectIsLoggedIn} from "../../features/Auth/selectors";
+import {appSelectors} from "../../features/Application";
+import {authActions, authSelectors} from "../../features/Auth";
+import {useActions} from "../../utils/reduxUtils";
 
 export const ButtonAppBar = () => {
-  const status = useSelector(selectAppStatus);
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const dispatch = useDispatch();
+  const status = useSelector(appSelectors.selectAppStatus);
+  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+  const {logout} = useActions(authActions);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC());
-  }, [dispatch]);
+    logout();
+  }, [logout]);
 
   return (
     <Box sx={{flexGrow: 1}}>
