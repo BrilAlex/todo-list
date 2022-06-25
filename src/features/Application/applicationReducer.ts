@@ -2,7 +2,7 @@ import {setIsLoggedInAC} from "../Auth/authReducer";
 import {authAPI} from "../../api/todoListsApi";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {appActions} from "../CommonActions/app";
+import {commonAppActions} from "../CommonActions/app";
 
 // Types
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
@@ -12,10 +12,11 @@ export type InitStateType = {
   error: string | null
 };
 
-const {setAppStatus, setAppError} = appActions;
+// Common App actions
+const {setAppStatus, setAppError} = commonAppActions;
 
 // Thunk Creators
-export const initializeAppTC = createAsyncThunk("app/initializeApp", async (
+const initializeApp = createAsyncThunk("app/initializeApp", async (
   params, {dispatch, rejectWithValue}
 ) => {
   try {
@@ -31,8 +32,13 @@ export const initializeAppTC = createAsyncThunk("app/initializeApp", async (
   }
 });
 
+// Async App actions
+export const asyncAppActions = {
+  initializeApp,
+};
+
 // Slice
-const slice = createSlice({
+export const appSlice = createSlice({
   name: "app",
   initialState: {
     isInitialized: false,
@@ -42,7 +48,7 @@ const slice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(initializeAppTC.fulfilled, (state) => {
+      .addCase(initializeApp.fulfilled, (state) => {
         state.isInitialized = true;
       })
       .addCase(setAppStatus, (state, action) => {
@@ -53,6 +59,3 @@ const slice = createSlice({
       });
   },
 });
-
-// Reducer
-export const applicationReducer = slice.reducer;

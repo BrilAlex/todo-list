@@ -1,22 +1,22 @@
 import {Story} from "@storybook/react";
 import {Provider} from "react-redux";
 import {combineReducers} from "redux";
-import {tasksReducer} from "../../features/TodoListsList/tasksReducer";
-import {todoListsReducer} from "../../features/TodoListsList/todoListsReducer";
 import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses} from "../../api/types";
 import thunk from "redux-thunk";
-import {applicationReducer} from "../../features/Application/applicationReducer";
+import {appReducer} from "../../features/Application";
 import {authReducer} from "../../features/Auth/authReducer";
+import {tasksReducer} from "../../features/TodoListsList/tasksReducer";
+import {todoListsReducer} from "../../features/TodoListsList/todoListsReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {HashRouter} from "react-router-dom";
 import {AppStateType, RootReducerType} from "../../utils/types";
 
 const rootReducer: RootReducerType = combineReducers({
+  app: appReducer,
+  auth: authReducer,
   tasks: tasksReducer,
   todoLists: todoListsReducer,
-  app: applicationReducer,
-  auth: authReducer,
 })
 
 const initialGlobalState: AppStateType = {

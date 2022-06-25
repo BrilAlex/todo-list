@@ -6,9 +6,12 @@ import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Auth/Login";
-import {useDispatch, useSelector} from "react-redux";
-import {initializeAppTC} from "../features/Application/applicationReducer";
+import {useSelector} from "react-redux";
 import {selectAppIsInitialized} from "../features/Application/selectors";
+import {useActions} from "../utils/reduxUtils";
+import {appActions} from "../features/Application";
+
+
 
 type PropsType = {
   demoMode?: boolean
@@ -16,13 +19,13 @@ type PropsType = {
 
 function App({demoMode = false}: PropsType) {
   const isInitialized = useSelector(selectAppIsInitialized);
-  const dispatch = useDispatch();
+  const {initializeApp} = useActions(appActions);
 
   useEffect(() => {
     if (!demoMode) {
-      dispatch(initializeAppTC());
+      initializeApp();
     }
-  }, [dispatch, demoMode]);
+  }, [initializeApp, demoMode]);
 
   if (!isInitialized) {
     return (

@@ -4,7 +4,7 @@ import {RequestStatusType} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {fetchTasksTC} from "./tasksReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {appActions} from "../CommonActions/app";
+import {commonAppActions} from "../CommonActions/app";
 
 // Types
 export type FilterValueType = "all" | "active" | "completed";
@@ -13,7 +13,7 @@ export type TodoListDomainType = TodoListType & {
   entityStatus: RequestStatusType
 };
 
-const {setAppStatus} = appActions;
+const {setAppStatus} = commonAppActions;
 
 // Thunk Creators
 export const fetchTodoListsTC = createAsyncThunk("todoLists/fetchTodoLists", async (

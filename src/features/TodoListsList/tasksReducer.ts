@@ -14,7 +14,7 @@ import {RequestStatusType} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppStateType} from "../../utils/types";
-import {appActions} from "../CommonActions/app";
+import {commonAppActions} from "../CommonActions/app";
 
 // Types
 export type TaskDomainType = TaskType & { entityStatus: RequestStatusType }
@@ -30,7 +30,7 @@ export type UpdateDomainTaskModelType = {
   deadline?: string
 };
 
-const {setAppStatus} = appActions;
+const {setAppStatus} = commonAppActions;
 
 // Thunk Creators
 export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todoList_ID: string, thunkAPI) => {

@@ -1,8 +1,8 @@
 import {Dispatch} from "redux";
 import {ResponseType} from "../api/types";
-import {appActions} from "../features/CommonActions/app";
+import {commonAppActions} from "../features/CommonActions/app";
 
-const {setAppStatus, setAppError} = appActions;
+const {setAppStatus, setAppError} = commonAppActions;
 
 // Generic function
 export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: Dispatch) => {

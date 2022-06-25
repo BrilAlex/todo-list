@@ -4,9 +4,9 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/errorU
 import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ThunkErrorType} from "../../utils/types";
-import {appActions} from "../CommonActions/app";
+import {commonAppActions} from "../CommonActions/app";
 
-const {setAppStatus} = appActions;
+const {setAppStatus} = commonAppActions;
 
 // Thunk Creators
 export const loginTC = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
