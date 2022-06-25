@@ -11,11 +11,6 @@ export type TodoListDomainType = TodoListType & {
   filter: FilterValueType
   entityStatus: RequestStatusType
 };
-export type ClearTodoListsDataActionType = ReturnType<typeof clearTodoListsDataAC>;
-export type TodoListsActionsType =
-  | ReturnType<typeof changeTodoListFilterAC>
-  | ReturnType<typeof changeTodolistEntityStatusAC>
-  | ClearTodoListsDataActionType;
 
 // Thunk Creators
 export const fetchTodoListsTC = createAsyncThunk("todoLists/fetchTodoLists", async (

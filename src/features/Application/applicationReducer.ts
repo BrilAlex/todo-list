@@ -10,11 +10,6 @@ export type InitStateType = {
   status: RequestStatusType
   error: string | null
 };
-export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>;
-export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>;
-export type AppActionsType =
-  | SetAppStatusActionType
-  | SetAppErrorActionType;
 
 // Thunk Creators
 export const initializeAppTC = createAsyncThunk("app/initializeApp", async (

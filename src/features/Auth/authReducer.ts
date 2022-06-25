@@ -1,18 +1,13 @@
-import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../Application/applicationReducer";
+import {setAppStatusAC} from "../Application/applicationReducer";
 import {authAPI} from "../../api/todoListsApi";
-import {FieldErrorType, LoginParamsType} from "../../api/types";
+import {LoginParamsType} from "../../api/types";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-
-// Types
-export type AuthActionsType =
-  | ReturnType<typeof setIsLoggedInAC>
-  | SetAppStatusActionType
-  | SetAppErrorActionType;
+import {ThunkErrorType} from "../../utils/types";
 
 // Thunk Creators
-export const loginTC = createAsyncThunk<undefined, LoginParamsType, { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }>(
+export const loginTC = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
   "auth/login", async (params, thunkAPI
   ) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}));

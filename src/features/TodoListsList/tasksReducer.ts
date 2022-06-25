@@ -1,7 +1,6 @@
 import {
   addTodoListTC,
   clearTodoListsDataAC,
-  ClearTodoListsDataActionType,
   fetchTodoListsTC, removeTodoListTC
 } from "./todoListsReducer";
 import {todoListsAPI} from "../../api/todoListsApi";
@@ -11,13 +10,13 @@ import {
   TaskType,
   UpdateTaskRequestDataType
 } from "../../api/types";
-import {AppStateType} from "../../app/store";
 import {
   RequestStatusType,
   setAppStatusAC,
 } from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppStateType} from "../../utils/types";
 
 // Types
 export type TaskDomainType = TaskType & { entityStatus: RequestStatusType }
@@ -32,9 +31,6 @@ export type UpdateDomainTaskModelType = {
   startDate?: string
   deadline?: string
 };
-export type TasksActionsType =
-  | ReturnType<typeof changeTaskEntityStatusAC>
-  | ClearTodoListsDataActionType;
 
 // Thunk Creators
 export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todoList_ID: string, thunkAPI) => {
