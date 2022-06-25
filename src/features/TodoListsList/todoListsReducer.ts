@@ -1,9 +1,10 @@
 import {todoListsAPI} from "../../api/todoListsApi";
 import {TodoListType} from "../../api/types";
-import {RequestStatusType, setAppStatusAC} from "../Application/applicationReducer";
+import {RequestStatusType} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
 import {fetchTasksTC} from "./tasksReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {appActions} from "../CommonActions/app";
 
 // Types
 export type FilterValueType = "all" | "active" | "completed";
@@ -12,18 +13,20 @@ export type TodoListDomainType = TodoListType & {
   entityStatus: RequestStatusType
 };
 
+const {setAppStatus} = appActions;
+
 // Thunk Creators
 export const fetchTodoListsTC = createAsyncThunk("todoLists/fetchTodoLists", async (
   params, {dispatch, rejectWithValue}
 ) => {
-  dispatch(setAppStatusAC({status: "loading"}));
+  dispatch(setAppStatus({status: "loading"}));
   const response = await todoListsAPI.getTodoLists();
   try {
     const todoLists = response.data;
     todoLists.forEach(tl => {
       dispatch(fetchTasksTC(tl.id));
     });
-    dispatch(setAppStatusAC({status: "succeeded"}));
+    dispatch(setAppStatus({status: "succeeded"}));
     return {todoLists};
   } catch (error) {
     handleServerNetworkError(error as { message: string }, dispatch);
@@ -33,12 +36,12 @@ export const fetchTodoListsTC = createAsyncThunk("todoLists/fetchTodoLists", asy
 export const removeTodoListTC = createAsyncThunk("todoLists/removeTodoList", async (
   todoList_ID: string, {dispatch, rejectWithValue}
 ) => {
-  dispatch(setAppStatusAC({status: "loading"}));
+  dispatch(setAppStatus({status: "loading"}));
   dispatch(changeTodolistEntityStatusAC({id: todoList_ID, status: "loading"}));
   const response = await todoListsAPI.deleteTodoList(todoList_ID);
   try {
     if (response.data.resultCode === 0) {
-      dispatch(setAppStatusAC({status: "succeeded"}));
+      dispatch(setAppStatus({status: "succeeded"}));
       return {id: todoList_ID};
     } else {
       handleServerAppError(response.data, dispatch);
@@ -52,11 +55,11 @@ export const removeTodoListTC = createAsyncThunk("todoLists/removeTodoList", asy
 export const addTodoListTC = createAsyncThunk("todoLists/addTodoList", async (
   title: string, {dispatch, rejectWithValue}
 ) => {
-  dispatch(setAppStatusAC({status: "loading"}));
+  dispatch(setAppStatus({status: "loading"}));
   const response = await todoListsAPI.createTodoList(title);
   try {
     if (response.data.resultCode === 0) {
-      dispatch(setAppStatusAC({status: "succeeded"}));
+      dispatch(setAppStatus({status: "succeeded"}));
       return {todoList: response.data.data.item};
     } else {
       handleServerAppError(response.data, dispatch);
@@ -70,11 +73,11 @@ export const addTodoListTC = createAsyncThunk("todoLists/addTodoList", async (
 export const changeTodoListTitleTC = createAsyncThunk("todoLists/changeTodoListTitle", async (
   params: { todoList_ID: string, newTitle: string }, {dispatch, rejectWithValue}
 ) => {
-  dispatch(setAppStatusAC({status: "loading"}));
+  dispatch(setAppStatus({status: "loading"}));
   const response = await todoListsAPI.updateTodoList(params.todoList_ID, params.newTitle);
   try {
     if (response.data.resultCode === 0) {
-      dispatch(setAppStatusAC({status: "succeeded"}));
+      dispatch(setAppStatus({status: "succeeded"}));
       return {id: params.todoList_ID, title: params.newTitle};
     } else {
       handleServerAppError(response.data, dispatch);
