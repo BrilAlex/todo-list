@@ -1,6 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
 import {FilterValueType} from "./todoListsReducer";
-import {addTaskTC, removeTaskTC, updateTaskTC} from "./tasksReducer";
 import React, {FC, useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/types";
 import {Grid, Paper} from "@mui/material";
@@ -8,7 +7,7 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 import {Navigate} from "react-router-dom";
 import {authSelectors} from "../Auth";
-import {todoListsActions, todoListsSelectors} from "./index";
+import {tasksActions, todoListsActions, todoListsSelectors} from "./index";
 import {useActions} from "../../utils/reduxUtils";
 
 type PropsType = {
@@ -24,8 +23,11 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     addTodoList,
     changeTodoListTitle,
     changeTodoListFilter,
-    removeTodoList
-  } = useActions(todoListsActions);
+    removeTodoList,
+    addTask,
+    updateTask,
+    removeTask,
+  } = useActions({...todoListsActions, ...tasksActions});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,22 +37,21 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     fetchTodoLists();
   }, [fetchTodoLists, demoMode, isLoggedIn]);
 
-  const addTask = useCallback((todoList_ID: string, title: string) => {
-    dispatch(addTaskTC({todoList_ID, title}));
-  }, [dispatch]);
+  const addTaskCallback = useCallback((todoList_ID: string, title: string) => {
+    addTask({todoList_ID, title});
+  }, [addTask]);
 
-  const changeTaskTitle = useCallback((todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatch(updateTaskTC({todoList_ID, task_ID, model: {title: newTitle}}));
-  }, [dispatch]);
+  const changeTaskTitleCallback = useCallback((todoList_ID: string, task_ID: string, newTitle: string) => {
+    updateTask({todoList_ID, task_ID, model: {title: newTitle}});
+  }, [updateTask]);
 
-  const changeTaskStatus = useCallback((todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatch(updateTaskTC({todoList_ID, task_ID, model: {status: newStatus}}));
-  }, [dispatch]);
+  const changeTaskStatusCallback = useCallback((todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
+    updateTask({todoList_ID, task_ID, model: {status: newStatus}});
+  }, [updateTask]);
 
-  const removeTask = useCallback((todoList_ID: string, task_ID: string) => {
-    const thunk = removeTaskTC({todoList_ID, task_ID});
-    dispatch(thunk);
-  }, [dispatch]);
+  const removeTaskCallback = useCallback((todoList_ID: string, task_ID: string) => {
+    removeTask({todoList_ID, task_ID});
+  }, [removeTask]);
 
   const addTodoListCallback = useCallback((title: string) => {
     addTodoList(title);
@@ -81,11 +82,11 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
                 <TodoList
                   todoList={tl}
                   tasks={tasks[tl.id]}
-                  addTask={addTask}
-                  changeTaskTitle={changeTaskTitle}
+                  addTask={addTaskCallback}
+                  changeTaskTitle={changeTaskTitleCallback}
                   changeTodoListTitle={changeTodoListTitleCallback}
-                  changeTaskStatus={changeTaskStatus}
-                  removeTask={removeTask}
+                  changeTaskStatus={changeTaskStatusCallback}
+                  removeTask={removeTaskCallback}
                   changeFilter={changeTodoListFilterCallback}
                   removeTodoList={removeTodoList}
                   demoMode={demoMode}

@@ -1,4 +1,4 @@
-import {tasksReducer, TasksType} from "./tasksReducer";
+import {tasksSlice, TasksType} from "./tasksReducer";
 import {
   asyncActions as asyncTodoListsActions,
   TodoListDomainType,
@@ -8,6 +8,7 @@ import {TodoListType} from "../../api/types";
 import {v1} from "uuid";
 
 const todoListsReducer = todoListsSlice.reducer;
+const tasksReducer = tasksSlice.reducer;
 const {addTodoList} = asyncTodoListsActions;
 
 test("Id should be equal", () => {

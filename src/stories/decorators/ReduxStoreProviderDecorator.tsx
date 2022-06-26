@@ -6,8 +6,7 @@ import {TaskPriorities, TaskStatuses} from "../../api/types";
 import thunk from "redux-thunk";
 import {appReducer} from "../../features/Application";
 import {authReducer} from "../../features/Auth";
-import {tasksReducer} from "../../features/TodoListsList/tasksReducer";
-import {todoListsReducer} from "../../features/TodoListsList";
+import {todoListsReducer, tasksReducer} from "../../features/TodoListsList";
 import {configureStore} from "@reduxjs/toolkit";
 import {HashRouter} from "react-router-dom";
 import {AppStateType, RootReducerType} from "../../utils/types";
@@ -15,8 +14,8 @@ import {AppStateType, RootReducerType} from "../../utils/types";
 const rootReducer: RootReducerType = combineReducers({
   app: appReducer,
   auth: authReducer,
-  tasks: tasksReducer,
   todoLists: todoListsReducer,
+  tasks: tasksReducer,
 })
 
 const initialGlobalState: AppStateType = {

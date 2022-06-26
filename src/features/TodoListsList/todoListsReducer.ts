@@ -2,7 +2,7 @@ import {todoListsAPI} from "../../api/todoListsApi";
 import {TodoListType} from "../../api/types";
 import {RequestStatusType} from "../Application/applicationReducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
-import {fetchTasksTC} from "./tasksReducer";
+import {asyncActions as asyncTaskActions} from "./tasksReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {commonAppActions} from "../CommonActions/app";
 import {commonTodoListsActions} from "../CommonActions/todoLists";
@@ -29,7 +29,7 @@ const fetchTodoLists = createAsyncThunk("todoLists/fetchTodoLists", async (
   try {
     const todoLists = response.data;
     todoLists.forEach(tl => {
-      dispatch(fetchTasksTC(tl.id));
+      dispatch(asyncTaskActions.fetchTasks(tl.id));
     });
     dispatch(setAppStatus({status: "succeeded"}));
     return {todoLists};

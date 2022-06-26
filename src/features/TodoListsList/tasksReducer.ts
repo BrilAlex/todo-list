@@ -34,7 +34,7 @@ const {setAppStatus} = commonAppActions;
 const {clearTodoListsData} = commonTodoListsActions;
 
 // Thunk Creators
-export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todoList_ID: string, thunkAPI) => {
+const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (todoList_ID: string, thunkAPI) => {
   thunkAPI.dispatch(setAppStatus({status: "loading"}));
   try {
     const response = await todoListsAPI.getTasks(todoList_ID);
@@ -46,9 +46,9 @@ export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todoList
     return thunkAPI.rejectWithValue(error);
   }
 });
-export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (params: { todoList_ID: string, task_ID: string }, thunkAPI) => {
+const removeTask = createAsyncThunk("tasks/removeTask", async (params: { todoList_ID: string, task_ID: string }, thunkAPI) => {
   thunkAPI.dispatch(setAppStatus({status: "loading"}));
-  thunkAPI.dispatch(changeTaskEntityStatusAC({
+  thunkAPI.dispatch(changeTaskEntityStatus({
     todoList_ID: params.todoList_ID,
     task_ID: params.task_ID,
     status: "loading"
@@ -67,7 +67,7 @@ export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (params: 
     return thunkAPI.rejectWithValue(error);
   }
 });
-export const addTaskTC = createAsyncThunk("tasks/addTask", async (
+const addTask = createAsyncThunk("tasks/addTask", async (
   params: { todoList_ID: string, title: string }, {dispatch, rejectWithValue}
 ) => {
   dispatch(setAppStatus({status: "loading"}));
@@ -85,7 +85,7 @@ export const addTaskTC = createAsyncThunk("tasks/addTask", async (
     return rejectWithValue(null);
   }
 });
-export const updateTaskTC = createAsyncThunk("tasks/updateTask", async (
+const updateTask = createAsyncThunk("tasks/updateTask", async (
   params: { todoList_ID: string, task_ID: string, model: UpdateDomainTaskModelType },
   {dispatch, getState, rejectWithValue},
 ) => {
@@ -121,12 +121,19 @@ export const updateTaskTC = createAsyncThunk("tasks/updateTask", async (
   }
 });
 
+export const asyncActions = {
+  fetchTasks,
+  addTask,
+  updateTask,
+  removeTask,
+};
+
 // Slice
-const slice = createSlice({
+export const tasksSlice = createSlice({
   name: "tasks",
   initialState: {} as TasksType,
   reducers: {
-    changeTaskEntityStatusAC(state, action: PayloadAction<{ todoList_ID: string, task_ID: string, status: RequestStatusType }>) {
+    changeTaskEntityStatus(state, action: PayloadAction<{ todoList_ID: string, task_ID: string, status: RequestStatusType }>) {
       const tasks = state[action.payload.todoList_ID];
       const index = tasks.findIndex(t => t.id === action.payload.task_ID);
       if (index > -1) tasks[index].entityStatus = action.payload.status;
@@ -145,21 +152,21 @@ const slice = createSlice({
       .addCase(asyncTodoListsActions.removeTodoList.fulfilled, (state, action) => {
         delete state[action.payload.id];
       })
-      .addCase(fetchTasksTC.fulfilled, (state, action) => {
+      .addCase(fetchTasks.fulfilled, (state, action) => {
         state[action.payload.todoList_ID] = action.payload.tasks.map(t => ({
           ...t,
           entityStatus: "idle"
         }));
       })
-      .addCase(removeTaskTC.fulfilled, (state, action) => {
+      .addCase(removeTask.fulfilled, (state, action) => {
         const tasks = state[action.payload.todoList_ID];
         const index = tasks.findIndex(t => t.id === action.payload.task_ID);
         if (index > -1) tasks.splice(index, 1);
       })
-      .addCase(addTaskTC.fulfilled, (state, action) => {
+      .addCase(addTask.fulfilled, (state, action) => {
         state[action.payload.todoListId].unshift({...action.payload, entityStatus: "idle"});
       })
-      .addCase(updateTaskTC.fulfilled, (state, action) => {
+      .addCase(updateTask.fulfilled, (state, action) => {
         const tasks = state[action.payload.todoList_ID];
         const index = tasks.findIndex(t => t.id === action.payload.task_ID);
         if (index > -1) tasks[index] = {...tasks[index], ...action.payload.model};
@@ -170,8 +177,5 @@ const slice = createSlice({
   },
 });
 
-// Reducer
-export const tasksReducer = slice.reducer;
-
 // Action Creators
-export const {changeTaskEntityStatusAC} = slice.actions;
+const {changeTaskEntityStatus} = tasksSlice.actions;

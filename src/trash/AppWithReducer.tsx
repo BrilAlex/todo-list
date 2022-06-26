@@ -6,13 +6,13 @@ import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {ButtonAppBar} from "../components/AppBar/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {FilterValueType} from "../features/TodoListsList/todoListsReducer";
-import {
-  addTaskTC,
-  removeTaskTC,
-  tasksReducer, updateTaskTC
-} from "../features/TodoListsList/tasksReducer";
 import {TaskPriorities, TaskStatuses} from "../api/types";
-import {todoListsActions, todoListsReducer} from "../features/TodoListsList";
+import {
+  todoListsActions,
+  todoListsReducer,
+  tasksReducer,
+  tasksActions
+} from "../features/TodoListsList";
 import {useActions} from "../utils/reduxUtils";
 
 function AppWithReducer() {
@@ -98,31 +98,34 @@ function AppWithReducer() {
     addTodoList,
     changeTodoListTitle,
     changeTodoListFilter,
-    removeTodoList
-  } = useActions(todoListsActions);
+    removeTodoList,
+    addTask,
+    updateTask,
+    removeTask,
+  } = useActions({...todoListsActions, ...tasksActions});
 
-  const addTask = (todoList_ID: string, title: string) => {
+  const addTaskCallback = (todoList_ID: string, title: string) => {
     const newTask = {
       id: v1(), title: title, todoListId: todoList_ID, description: "",
       status: TaskStatuses.New, priority: TaskPriorities.Low,
       startDate: "", deadline: "", addedDate: "", order: 0,
     };
     const params = {todoList_ID: newTask.todoListId, title: newTask.title};
-    dispatchToTasks(addTaskTC.fulfilled(newTask, "request_ID", params));
+    dispatchToTasks(addTask.fulfilled(newTask, "request_ID", params));
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
     const params = {todoList_ID, task_ID, model: {title: newTitle}}
-    dispatchToTasks(updateTaskTC.fulfilled(params, "request_ID", params));
+    dispatchToTasks(updateTask.fulfilled(params, "request_ID", params));
   };
 
   const changeTaskStatus = (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
     const params = {todoList_ID, task_ID, model: {status: newStatus}}
-    dispatchToTasks(updateTaskTC.fulfilled(params, "request_ID", params));
+    dispatchToTasks(updateTask.fulfilled(params, "request_ID", params));
   };
 
-  const removeTask = (todoList_ID: string, task_ID: string) => {
-    dispatchToTasks(removeTaskTC.fulfilled(
+  const removeTaskCallback = (todoList_ID: string, task_ID: string) => {
+    dispatchToTasks(removeTask.fulfilled(
       {todoList_ID, task_ID},
       "request_ID",
       {todoList_ID, task_ID}
@@ -179,11 +182,11 @@ function AppWithReducer() {
                   <TodoList
                     todoList={tl}
                     tasks={tasksForTodoList}
-                    addTask={addTask}
+                    addTask={addTaskCallback}
                     changeTaskTitle={changeTaskTitle}
                     changeTodoListTitle={changeTodoListTitleCallback}
                     changeTaskStatus={changeTaskStatus}
-                    removeTask={removeTask}
+                    removeTask={removeTaskCallback}
                     changeFilter={changeTodoListFilterCallback}
                     removeTodoList={removeTodoListCallback}
                   />
