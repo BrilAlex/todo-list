@@ -1,9 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {
-  addTodoListTC, changeTodoListFilterAC,
-  changeTodoListTitleTC,
-  fetchTodoListsTC, FilterValueType, removeTodoListTC,
-} from "./todoListsReducer";
+import {FilterValueType} from "./todoListsReducer";
 import {addTaskTC, removeTaskTC, updateTaskTC} from "./tasksReducer";
 import React, {FC, useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/types";
@@ -12,7 +8,8 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 import {Navigate} from "react-router-dom";
 import {authSelectors} from "../Auth";
-import {selectTasks, selectTodoLists} from "./selectors";
+import {todoListsActions, todoListsSelectors} from "./index";
+import {useActions} from "../../utils/reduxUtils";
 
 type PropsType = {
   demoMode?: boolean
@@ -20,16 +17,23 @@ type PropsType = {
 
 export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
-  const todoLists = useSelector(selectTodoLists);
-  const tasks = useSelector(selectTasks);
+  const todoLists = useSelector(todoListsSelectors.selectTodoLists);
+  const tasks = useSelector(todoListsSelectors.selectTasks);
+  const {
+    fetchTodoLists,
+    addTodoList,
+    changeTodoListTitle,
+    changeTodoListFilter,
+    removeTodoList
+  } = useActions(todoListsActions);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (demoMode || !isLoggedIn) {
       return;
     }
-    dispatch(fetchTodoListsTC());
-  }, [dispatch, demoMode, isLoggedIn]);
+    fetchTodoLists();
+  }, [fetchTodoLists, demoMode, isLoggedIn]);
 
   const addTask = useCallback((todoList_ID: string, title: string) => {
     dispatch(addTaskTC({todoList_ID, title}));
@@ -48,21 +52,17 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     dispatch(thunk);
   }, [dispatch]);
 
-  const addTodoList = useCallback((title: string) => {
-    dispatch(addTodoListTC(title));
-  }, [dispatch]);
+  const addTodoListCallback = useCallback((title: string) => {
+    addTodoList(title);
+  }, [addTodoList]);
 
-  const changeTodoListTitle = useCallback((todoList_ID: string, newTitle: string) => {
-    dispatch(changeTodoListTitleTC({todoList_ID, newTitle}));
-  }, [dispatch]);
+  const changeTodoListTitleCallback = useCallback((todoList_ID: string, newTitle: string) => {
+    changeTodoListTitle({todoList_ID, newTitle});
+  }, [changeTodoListTitle]);
 
-  const changeFilter = useCallback((todoList_ID: string, filterValue: FilterValueType) => {
-    dispatch(changeTodoListFilterAC({id: todoList_ID, filter: filterValue}));
-  }, [dispatch]);
-
-  const removeTodoList = useCallback((todoList_ID: string) => {
-    dispatch(removeTodoListTC(todoList_ID));
-  }, [dispatch]);
+  const changeTodoListFilterCallback = useCallback((todoList_ID: string, filterValue: FilterValueType) => {
+    changeTodoListFilter({id: todoList_ID, filter: filterValue});
+  }, [changeTodoListFilter]);
 
   if (!isLoggedIn) {
     return <Navigate to={"/login"}/>;
@@ -71,7 +71,7 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   return (
     <>
       <Grid container style={{padding: "20px"}}>
-        <AddItemForm addItem={addTodoList}/>
+        <AddItemForm addItem={addTodoListCallback}/>
       </Grid>
       <Grid container spacing={3}>
         {todoLists.map(tl => {
@@ -83,10 +83,10 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
                   tasks={tasks[tl.id]}
                   addTask={addTask}
                   changeTaskTitle={changeTaskTitle}
-                  changeTodoListTitle={changeTodoListTitle}
+                  changeTodoListTitle={changeTodoListTitleCallback}
                   changeTaskStatus={changeTaskStatus}
                   removeTask={removeTask}
-                  changeFilter={changeFilter}
+                  changeFilter={changeTodoListFilterCallback}
                   removeTodoList={removeTodoList}
                   demoMode={demoMode}
                 />

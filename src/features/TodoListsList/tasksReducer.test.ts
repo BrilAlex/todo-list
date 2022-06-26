@@ -4,9 +4,11 @@ import {
   tasksReducer,
   TasksType, updateTaskTC
 } from "./tasksReducer";
-import {addTodoListTC, fetchTodoListsTC, removeTodoListTC} from "./todoListsReducer";
+import {asyncActions as asyncTodoListsActions} from "./todoListsReducer";
 import {TaskPriorities, TaskStatuses, TaskType, TodoListType} from "../../api/types";
 import {v1} from "uuid";
+
+const {fetchTodoLists, addTodoList, removeTodoList} = asyncTodoListsActions;
 
 let startState: TasksType;
 
@@ -142,7 +144,7 @@ test("Title of specified task should be changed", () => {
 
 test("Property with new array should be added when new todolist is added", () => {
   const newTodoList: TodoListType = {id: v1(), title: "New TodoList", addedDate: "", order: 0};
-  const action = addTodoListTC.fulfilled(
+  const action = addTodoList.fulfilled(
     {todoList: newTodoList},
     "request_ID",
     newTodoList.title,
@@ -160,7 +162,7 @@ test("Property with new array should be added when new todolist is added", () =>
 });
 
 test("Property with TodoList_ID should be deleted", () => {
-  const action = removeTodoListTC.fulfilled(
+  const action = removeTodoList.fulfilled(
     {id: "todoList_ID2"},
     "request_ID",
     "todoList_ID2"
@@ -180,7 +182,7 @@ test("Empty arrays should be added when todoLists are set", () => {
       {id: "todoList_ID2", title: "What to buy", addedDate: "", order: 0},
     ]
   };
-  const action = fetchTodoListsTC.fulfilled(todoLists, "request_ID");
+  const action = fetchTodoLists.fulfilled(todoLists, "request_ID");
   const endState = tasksReducer({}, action);
   const keys = Object.keys(endState);
 

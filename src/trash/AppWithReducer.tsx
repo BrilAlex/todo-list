@@ -5,19 +5,15 @@ import {v1} from "uuid";
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {ButtonAppBar} from "../components/AppBar/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
-import {
-  addTodoListTC,
-  changeTodoListFilterAC, changeTodoListTitleTC,
-  FilterValueType, removeTodoListTC,
-  todoListsReducer
-} from "../features/TodoListsList/todoListsReducer";
+import {FilterValueType} from "../features/TodoListsList/todoListsReducer";
 import {
   addTaskTC,
   removeTaskTC,
   tasksReducer, updateTaskTC
 } from "../features/TodoListsList/tasksReducer";
 import {TaskPriorities, TaskStatuses} from "../api/types";
-
+import {todoListsActions, todoListsReducer} from "../features/TodoListsList";
+import {useActions} from "../utils/reduxUtils";
 
 function AppWithReducer() {
   const todoList_ID1 = v1();
@@ -98,6 +94,12 @@ function AppWithReducer() {
       },
     ],
   });
+  const {
+    addTodoList,
+    changeTodoListTitle,
+    changeTodoListFilter,
+    removeTodoList
+  } = useActions(todoListsActions);
 
   const addTask = (todoList_ID: string, title: string) => {
     const newTask = {
@@ -127,27 +129,27 @@ function AppWithReducer() {
     ));
   };
 
-  const addTodoList = (title: string) => {
+  const addTodoListCallback = (title: string) => {
     const newTodoList = {id: v1(), title, addedDate: "", order: 0};
-    const action = addTodoListTC.fulfilled({todoList: newTodoList}, "request_ID", title);
+    const action = addTodoList.fulfilled({todoList: newTodoList}, "request_ID", title);
     dispatchToTodoLists(action);
     dispatchToTasks(action);
   };
 
-  const changeTodoListTitle = (todoList_ID: string, newTitle: string) => {
-    dispatchToTodoLists(changeTodoListTitleTC.fulfilled(
+  const changeTodoListTitleCallback = (todoList_ID: string, newTitle: string) => {
+    dispatchToTodoLists(changeTodoListTitle.fulfilled(
       {id: todoList_ID, title: newTitle},
       "request_ID",
       {todoList_ID, newTitle}
     ));
   };
 
-  const changeFilter = (todoList_ID: string, filterValue: FilterValueType) => {
-    dispatchToTodoLists(changeTodoListFilterAC({id: todoList_ID, filter: filterValue}));
+  const changeTodoListFilterCallback = (todoList_ID: string, filterValue: FilterValueType) => {
+    dispatchToTodoLists(changeTodoListFilter({id: todoList_ID, filter: filterValue}));
   };
 
-  const removeTodoList = (todoList_ID: string) => {
-    const action = removeTodoListTC.fulfilled({id: todoList_ID}, "request_ID", todoList_ID);
+  const removeTodoListCallback = (todoList_ID: string) => {
+    const action = removeTodoList.fulfilled({id: todoList_ID}, "request_ID", todoList_ID);
     dispatchToTodoLists(action);
     dispatchToTasks(action);
   };
@@ -157,7 +159,7 @@ function AppWithReducer() {
       <ButtonAppBar/>
       <Container fixed>
         <Grid container style={{padding: "20px"}}>
-          <AddItemForm addItem={addTodoList}/>
+          <AddItemForm addItem={addTodoListCallback}/>
         </Grid>
         <Grid container spacing={3}>
           {todoLists.map(tl => {
@@ -179,11 +181,11 @@ function AppWithReducer() {
                     tasks={tasksForTodoList}
                     addTask={addTask}
                     changeTaskTitle={changeTaskTitle}
-                    changeTodoListTitle={changeTodoListTitle}
+                    changeTodoListTitle={changeTodoListTitleCallback}
                     changeTaskStatus={changeTaskStatus}
                     removeTask={removeTask}
-                    changeFilter={changeFilter}
-                    removeTodoList={removeTodoList}
+                    changeFilter={changeTodoListFilterCallback}
+                    removeTodoList={removeTodoListCallback}
                   />
                 </Paper>
               </Grid>

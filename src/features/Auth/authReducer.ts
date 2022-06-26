@@ -1,13 +1,16 @@
 import {authAPI} from "../../api/todoListsApi";
 import {LoginParamsType} from "../../api/types";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/errorUtils";
-import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ThunkErrorType} from "../../utils/types";
 import {commonAppActions} from "../CommonActions/app";
+import {commonTodoListsActions} from "../CommonActions/todoLists";
 
 // Common App actions
 const {setAppStatus} = commonAppActions;
+
+// Common TodoLists actions
+const {clearTodoListsData} = commonTodoListsActions;
 
 // Thunk Creators
 const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
@@ -39,7 +42,7 @@ const logout = createAsyncThunk("auth/logout", async (params, thunkAPI) => {
   try {
     const response = await authAPI.logout();
     if (response.data.resultCode === 0) {
-      thunkAPI.dispatch(clearTodoListsDataAC());
+      thunkAPI.dispatch(clearTodoListsData());
       thunkAPI.dispatch(setAppStatus({status: "succeeded"}));
       return;
     } else {

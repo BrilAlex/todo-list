@@ -6,5 +6,5 @@ const setAppError = createAction<{ error: string | null }>("app/setAppError");
 
 export const commonAppActions = {
   setAppStatus,
-  setAppError
+  setAppError,
 };
