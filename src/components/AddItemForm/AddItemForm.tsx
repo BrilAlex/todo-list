@@ -2,8 +2,12 @@ import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {IconButton, TextField} from "@mui/material";
 import {AddCircleOutline} from "@mui/icons-material";
 
+export type AddItemFormSubmitHelperType = {
+  setValue: (value: string) => void
+  setError: (value: string) => void
+};
 type AddItemFormPropsType = {
-  addItem: (title: string) => void
+  addItem: (title: string, helper: AddItemFormSubmitHelperType) => Promise<void>
   disabled?: boolean
 };
 
@@ -11,14 +15,13 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const addItemHandler = () => {
+  const addItemHandler = async () => {
     const trimmedValue = value.trim();
     if (trimmedValue !== "") {
-      addItem(trimmedValue);
+      addItem(trimmedValue, {setValue, setError});
     } else {
       setError("Title is required");
     }
-    setValue("");
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +47,12 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
         style={{marginBottom: "10px"}}
         disabled={disabled}
       />
-      <IconButton onClick={addItemHandler} color={"primary"} disabled={disabled}>
+      <IconButton
+        onClick={addItemHandler}
+        color={"primary"}
+        disabled={disabled}
+        style={{marginLeft: "5px"}}
+      >
         <AddCircleOutline/>
       </IconButton>
     </div>

@@ -3,6 +3,7 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/errorU
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {commonAppActions} from "../CommonActions/app";
 import {authActions} from "../Auth";
+import {AxiosError} from "axios";
 
 // Types
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
@@ -19,21 +20,21 @@ const {setAppStatus, setAppError} = commonAppActions;
 const {setIsLoggedIn} = authActions;
 
 // Thunk Creators
-const initializeApp = createAsyncThunk("app/initializeApp", async (
-  params, {dispatch, rejectWithValue}
-) => {
-  try {
-    const response = await authAPI.me();
-    if (response.data.resultCode === 0) {
-      dispatch(setIsLoggedIn({value: true}));
-    } else {
-      handleServerAppError(response.data, dispatch);
+const initializeApp = createAsyncThunk(
+  "app/initializeApp",
+  async (params, thunkAPI) => {
+    try {
+      const response = await authAPI.me();
+      if (response.data.resultCode === 0) {
+        thunkAPI.dispatch(setIsLoggedIn({value: true}));
+      } else {
+        handleServerAppError(response.data, thunkAPI);
+      }
+    } catch (error) {
+      handleServerNetworkError(error as AxiosError, thunkAPI);
     }
-  } catch (error) {
-    handleServerNetworkError(error as { message: string }, dispatch);
-    return rejectWithValue({});
   }
-});
+);
 
 // Async App actions
 export const asyncAppActions = {

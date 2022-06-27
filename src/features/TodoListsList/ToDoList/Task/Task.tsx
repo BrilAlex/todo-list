@@ -4,46 +4,58 @@ import {Delete} from "@mui/icons-material";
 import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import {TaskStatuses} from "../../../../api/types";
 import {TaskDomainType} from "../../tasksReducer";
+import {useActions} from "../../../../utils/reduxUtils";
+import {tasksActions} from "../../index";
 
 type TaskPropsType = {
   task: TaskDomainType
   todoList_ID: string
-  changeTaskTitle: (todoList_ID: string, task_ID: string, newTitle: string) => void
-  changeTaskStatus: (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => void
-  removeTask: (todoList_ID: string, task_ID: string) => void
 };
 
 export const Task = React.memo((props: TaskPropsType) => {
   const {id, title, status, entityStatus} = props.task;
+  const {updateTask, removeTask} = useActions(tasksActions);
 
   const changeTaskTitle = useCallback((newTitle: string) => {
-    props.changeTaskTitle(props.todoList_ID, id, newTitle);
-  }, [props.changeTaskTitle, props.todoList_ID, id]);
+    updateTask({
+      todoList_ID: props.todoList_ID,
+      task_ID: id,
+      model: {title: newTitle},
+    });
+  }, [updateTask, props.todoList_ID, id]);
 
   const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
-    props.changeTaskStatus(props.todoList_ID, id, newStatus);
-  }, [props.changeTaskStatus, props.todoList_ID, id]);
+    updateTask({
+      todoList_ID: props.todoList_ID,
+      task_ID: id,
+      model: {status: newStatus},
+    });
+  }, [updateTask, props.todoList_ID, id]);
 
-  const removeTask = useCallback(() => {
-    props.removeTask(props.todoList_ID, id);
-  }, [props.removeTask, props.todoList_ID, id]);
+  const deleteTask = useCallback(() => {
+    removeTask({todoList_ID: props.todoList_ID, task_ID: id});
+  }, [removeTask, props.todoList_ID, id]);
 
   return (
-    <div>
+    <div style={{position: "relative"}}>
       <Checkbox
         checked={status === TaskStatuses.Completed}
         onChange={changeTaskStatus}
         disabled={entityStatus === "loading"}
       />
-      <IconButton onClick={removeTask} disabled={entityStatus === "loading"}>
-        <Delete/>
-      </IconButton>
       <EditableSpan
         value={title}
         setNewValue={changeTaskTitle}
         disabled={entityStatus === "loading"}
       />
+      <IconButton
+        onClick={deleteTask}
+        disabled={entityStatus === "loading"}
+        style={{position: "absolute", top: "2px", right: "2px"}}
+      >
+        <Delete fontSize={"small"}/>
+      </IconButton>
     </div>
   );
 });

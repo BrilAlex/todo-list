@@ -13,15 +13,19 @@ export default {
   },
 } as ComponentMeta<typeof AddItemForm>;
 
+const asyncCallback = async (...params: any[]) => {
+  action("Item added")(...params);
+};
+
 const Template: ComponentStory<typeof AddItemForm> = (args) => <AddItemForm {...args} />;
 
 export const AddItemFormExample = Template.bind({});
 AddItemFormExample.args = {
-  addItem: action("Item added"),
+  addItem: asyncCallback,
 };
 
 export const AddItemFormDisabledExample = Template.bind({});
 AddItemFormDisabledExample.args = {
-  addItem: action("Item added"),
+  addItem: asyncCallback,
   disabled: true,
 };
