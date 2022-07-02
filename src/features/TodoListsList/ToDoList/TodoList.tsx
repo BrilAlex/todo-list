@@ -19,14 +19,14 @@ type TodoListPropsType = {
   demoMode?: boolean
 };
 type FilterButtonColorType =
-  "inherit"
+  | "inherit"
   | "primary"
   | "secondary"
   | "success"
   | "error"
   | "info"
   | "warning"
-  | undefined
+  | undefined;
 
 export const TodoList = React.memo(({demoMode = false, ...props}: TodoListPropsType) => {
   let tasksForTodoList = props.tasks;
@@ -107,6 +107,7 @@ export const TodoList = React.memo(({demoMode = false, ...props}: TodoListPropsT
         {tasksForTodoList.map((t) =>
           <Task key={t.id} task={t} todoList_ID={props.todoList.id}/>
         )}
+        {!tasksForTodoList.length && <div style={{padding: "10px"}}>No tasks</div>}
       </div>
       <div style={{paddingTop: "10px"}}>
         {renderFilterButton("all", "primary", "All")}

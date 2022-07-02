@@ -10,19 +10,15 @@ import {useSelector} from "react-redux";
 import {useActions} from "../utils/reduxUtils";
 import {appActions, appSelectors} from "../features/Application";
 
-type PropsType = {
-  demoMode?: boolean
-};
-
-function App({demoMode = false}: PropsType) {
+function App() {
   const isInitialized = useSelector(appSelectors.selectAppIsInitialized);
   const {initializeApp} = useActions(appActions);
 
   useEffect(() => {
-    if (!demoMode) {
+    if (!isInitialized) {
       initializeApp();
     }
-  }, [initializeApp, demoMode]);
+  }, [isInitialized, initializeApp]);
 
   if (!isInitialized) {
     return (
@@ -38,7 +34,7 @@ function App({demoMode = false}: PropsType) {
       <ButtonAppBar/>
       <Container fixed>
         <Routes>
-          <Route path={"/"} element={<TodoListsList demoMode={demoMode}/>}/>
+          <Route path={"/"} element={<TodoListsList demoMode={false}/>}/>
           <Route path={"/login"} element={<Login/>}/>
           <Route path={"/error404"} element={<h1>Error 404: Page not found</h1>}/>
           <Route path={"*"} element={<Navigate to={"/error404"}/>}/>

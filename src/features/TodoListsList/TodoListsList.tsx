@@ -23,8 +23,10 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     if (demoMode || !isLoggedIn) {
       return;
     }
-    fetchTodoLists();
-  }, [fetchTodoLists, demoMode, isLoggedIn]);
+    if (!todoLists.length) {
+      fetchTodoLists();
+    }
+  }, [fetchTodoLists, demoMode, isLoggedIn, todoLists.length]);
 
   const addTodoListCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
     const resultAction = await dispatch(todoListsActions.addTodoList(title));

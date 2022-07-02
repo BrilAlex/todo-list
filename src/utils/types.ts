@@ -1,5 +1,6 @@
-import {rootReducer, store} from "../app/store";
+import {store} from "../app/store";
 import {FieldErrorType} from "../api/types";
+import {rootReducer} from "../app/reducers";
 
 // Common Redux types
 export type RootReducerType = typeof rootReducer;
