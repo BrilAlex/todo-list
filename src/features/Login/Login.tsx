@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {loginTC} from "./authReducer";
+import {login} from "./authSagas";
 import {AppStateType} from "../../app/store";
 import {Navigate} from "react-router-dom";
 
@@ -44,7 +44,7 @@ export const Login = () => {
       return errors;
     },
     onSubmit: (values) => {
-      dispatch(loginTC(values));
+      dispatch(login(values));
       formik.resetForm();
     },
   });

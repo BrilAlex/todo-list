@@ -1,18 +1,19 @@
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {
-  addTodoListTC, changeTodoListFilterAC,
-  changeTodoListTitleTC,
-  fetchTodoListsTC, FilterValueType, removeTodoListTC,
+  changeTodoListFilterAC,
+  fetchTodoListsTC, FilterValueType,
   TodoListDomainType
 } from "./todoListsReducer";
-import {addTaskTC, removeTaskTC, TasksType, updateTaskTC} from "./tasksReducer";
+import {TasksType, updateTaskTC} from "./tasksReducer";
 import React, {FC, useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/todoListsApi";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 import {Navigate} from "react-router-dom";
+import {addTask, removeTask} from "./tasksSagas";
+import {addTodoList, changeTodoListTitle, removeTodoList} from "./todoListsSagas";
 
 type PropsType = {
   demoMode?: boolean
@@ -31,8 +32,8 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     dispatch(fetchTodoListsTC());
   }, [dispatch, demoMode, isLoggedIn]);
 
-  const addTask = useCallback((todoList_ID: string, title: string) => {
-    dispatch(addTaskTC(todoList_ID, title));
+  const addTaskCallback = useCallback((todoList_ID: string, title: string) => {
+    dispatch(addTask(todoList_ID, title));
   }, [dispatch]);
 
   const changeTaskTitle = useCallback((todoList_ID: string, task_ID: string, newTitle: string) => {
@@ -43,25 +44,25 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     dispatch(updateTaskTC(todoList_ID, task_ID, {status: newStatus}));
   }, [dispatch]);
 
-  const removeTask = useCallback((todoList_ID: string, task_ID: string) => {
-    const thunk = removeTaskTC(todoList_ID, task_ID);
+  const removeTaskCallback = useCallback((todoList_ID: string, task_ID: string) => {
+    const thunk = removeTask(todoList_ID, task_ID);
     dispatch(thunk);
   }, [dispatch]);
 
-  const addTodoList = useCallback((title: string) => {
-    dispatch(addTodoListTC(title));
+  const addTodoListCallback = useCallback((title: string) => {
+    dispatch(addTodoList(title));
   }, [dispatch]);
 
-  const changeTodoListTitle = useCallback((todoList_ID: string, newTitle: string) => {
-    dispatch(changeTodoListTitleTC(todoList_ID, newTitle));
+  const changeTodoListTitleCallback = useCallback((todoList_ID: string, newTitle: string) => {
+    dispatch(changeTodoListTitle(todoList_ID, newTitle));
   }, [dispatch]);
 
   const changeFilter = useCallback((todoList_ID: string, filterValue: FilterValueType) => {
     dispatch(changeTodoListFilterAC(todoList_ID, filterValue));
   }, [dispatch]);
 
-  const removeTodoList = useCallback((todoList_ID: string) => {
-    dispatch(removeTodoListTC(todoList_ID));
+  const removeTodoListCallback = useCallback((todoList_ID: string) => {
+    dispatch(removeTodoList(todoList_ID));
   }, [dispatch]);
 
   if (!isLoggedIn) {
@@ -71,7 +72,7 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   return (
     <>
       <Grid container style={{padding: "20px"}}>
-        <AddItemForm addItem={addTodoList}/>
+        <AddItemForm addItem={addTodoListCallback}/>
       </Grid>
       <Grid container spacing={3}>
         {todoLists.map(tl => {
@@ -81,13 +82,13 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
                 <TodoList
                   todoList={tl}
                   tasks={tasks[tl.id]}
-                  addTask={addTask}
+                  addTask={addTaskCallback}
                   changeTaskTitle={changeTaskTitle}
-                  changeTodoListTitle={changeTodoListTitle}
+                  changeTodoListTitle={changeTodoListTitleCallback}
                   changeTaskStatus={changeTaskStatus}
-                  removeTask={removeTask}
+                  removeTask={removeTaskCallback}
                   changeFilter={changeFilter}
-                  removeTodoList={removeTodoList}
+                  removeTodoList={removeTodoListCallback}
                   demoMode={demoMode}
                 />
               </Paper>

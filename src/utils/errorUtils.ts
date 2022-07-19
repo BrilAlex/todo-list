@@ -5,6 +5,7 @@ import {
 } from "../app/appReducer";
 import {Dispatch} from "redux";
 import {ResponseType} from "../api/todoListsApi";
+import {put} from "redux-saga/effects";
 
 type ErrorUtilsDispatchType = Dispatch<SetAppStatusActionType | SetAppErrorActionType>;
 
@@ -22,3 +23,17 @@ export const handleServerNetworkError = (error: { message: string }, dispatch: E
   dispatch(setAppErrorAC(error.message ? error.message : "Some error occurred"));
   dispatch(setAppStatusAC("failed"));
 };
+
+export function* handleServerAppErrorSaga<T>(data: ResponseType<T>) {
+  if (data.messages.length) {
+    yield put(setAppErrorAC(data.messages[0]));
+  } else {
+    yield put(setAppErrorAC("Some error occurred"));
+  }
+  yield put(setAppStatusAC("failed"));
+}
+
+export function* handleServerNetworkErrorSaga(error: { message: string }) {
+  yield put(setAppErrorAC(error.message ? error.message : "Some error occurred"));
+  yield put(setAppStatusAC("failed"));
+}

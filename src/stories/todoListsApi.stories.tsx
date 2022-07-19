@@ -95,7 +95,7 @@ export const GetTasks = () => {
 
   const getTasks = () => {
     todoListsAPI.getTasks(todoListID)
-      .then(response => setState(response.data));
+      .then(data => setState(data));
   };
 
   return (

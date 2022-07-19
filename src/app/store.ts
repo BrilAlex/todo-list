@@ -4,6 +4,12 @@ import {TasksActionsType, tasksReducer} from "../features/TodoListsList/tasksRed
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
 import {appReducer} from "./appReducer";
 import {AuthActionsType, authReducer} from "../features/Login/authReducer";
+import createSagaMiddleware from "redux-saga";
+import { all } from "redux-saga/effects";
+import {initializeAppSagaWorker} from "./appSagas";
+import {authSagaWatcher} from "../features/Login/authSagas";
+import {tasksSagaWatcher} from "../features/TodoListsList/tasksSagas";
+import {todoListsSagaWatcher} from "../features/TodoListsList/todoListsSagas";
 
 export type AppStateType = ReturnType<typeof rootReducer>;
 export type RootActionsType = TodoListsActionsType | TasksActionsType | AuthActionsType;
@@ -16,7 +22,20 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
-export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+const sagaMiddleware = createSagaMiddleware();
+
+export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, sagaMiddleware));
+
+function* rootSagaWatcher() {
+  yield all([
+    initializeAppSagaWorker(),
+    authSagaWatcher(),
+    todoListsSagaWatcher(),
+    tasksSagaWatcher(),
+  ]);
+}
+
+sagaMiddleware.run(rootSagaWatcher);
 
 // @ts-ignore
 window.store = store;

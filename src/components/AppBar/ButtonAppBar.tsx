@@ -4,7 +4,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {RequestStatusType} from "../../app/appReducer";
-import {logoutTC} from "../../features/Login/authReducer";
+import {logout} from "../../features/Login/authSagas";
 import {useCallback} from "react";
 
 export const ButtonAppBar = () => {
@@ -13,7 +13,7 @@ export const ButtonAppBar = () => {
   const dispatch = useDispatch();
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC());
+    dispatch(logout());
   }, [dispatch]);
 
   return (

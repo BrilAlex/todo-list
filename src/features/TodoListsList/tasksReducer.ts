@@ -61,50 +61,6 @@ export const changeTaskEntityStatusAC = (todoList_ID: string, task_ID: string, s
   ({type: "CHANGE-TASK-ENTITY-STATUS", todoList_ID, task_ID, status} as const);
 
 // Thunk Creators
-export const fetchTasksTC = (todoList_ID: string) => (dispatch: ThunkDispatchType) => {
-  dispatch(setAppStatusAC("loading"));
-  todoListsAPI.getTasks(todoList_ID)
-    .then(response => {
-      const tasks = response.data.items;
-      dispatch(setTasksAC(todoList_ID, tasks));
-      dispatch(setAppStatusAC("succeeded"));
-    })
-    .catch(error => {
-      handleServerNetworkError(error, dispatch);
-    });
-};
-export const removeTaskTC = (todoList_ID: string, task_ID: string) => (dispatch: ThunkDispatchType) => {
-  dispatch(setAppStatusAC("loading"));
-  dispatch(changeTaskEntityStatusAC(todoList_ID, task_ID, "loading"));
-  todoListsAPI.deleteTask(todoList_ID, task_ID)
-    .then(response => {
-      if (response.data.resultCode === 0) {
-        dispatch(removeTaskAC(todoList_ID, task_ID));
-        dispatch(setAppStatusAC("succeeded"));
-      } else {
-        handleServerAppError(response.data, dispatch);
-      }
-    })
-    .catch(error => {
-      handleServerNetworkError(error, dispatch);
-    });
-};
-export const addTaskTC = (todoList_ID: string, title: string) => (dispatch: ThunkDispatchType) => {
-  dispatch(setAppStatusAC("loading"));
-  todoListsAPI.createTask(todoList_ID, title)
-    .then(response => {
-      if (response.data.resultCode === 0) {
-        const newTask = response.data.data.item;
-        dispatch(addTaskAC(newTask));
-        dispatch(setAppStatusAC("succeeded"));
-      } else {
-        handleServerAppError(response.data, dispatch);
-      }
-    })
-    .catch(error => {
-      handleServerNetworkError(error, dispatch);
-    });
-};
 export const updateTaskTC = (todoList_ID: string, task_ID: string, domainModel: UpdateDomainTaskModelType) =>
   (dispatch: ThunkDispatchType, getState: () => AppStateType) => {
     dispatch(setAppStatusAC("loading"));

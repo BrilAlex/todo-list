@@ -7,7 +7,7 @@ import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
 import {useDispatch, useSelector} from "react-redux";
-import {initializeAppTC} from "./appReducer";
+import {initializeApp} from "./appSagas";
 import {AppStateType} from "./store";
 
 type PropsType = {
@@ -19,7 +19,7 @@ function App({demoMode = false}: PropsType) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initializeAppTC());
+    dispatch(initializeApp());
   }, [dispatch]);
 
   if (!isInitialized) {
