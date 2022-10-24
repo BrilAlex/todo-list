@@ -5,14 +5,14 @@ import {
   fetchTodoListsTC, FilterValueType,
   TodoListDomainType
 } from "./todoListsReducer";
-import {TasksType, updateTaskTC} from "./tasksReducer";
+import {TasksType} from "./tasksReducer";
 import React, {FC, useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/todoListsApi";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./ToDoList/TodoList";
 import {Navigate} from "react-router-dom";
-import {addTask, removeTask} from "./tasksSagas";
+import {addTask, removeTask, updateTask} from "./tasksSagas";
 import {addTodoList, changeTodoListTitle, removeTodoList} from "./todoListsSagas";
 
 type PropsType = {
@@ -37,11 +37,11 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
   }, [dispatch]);
 
   const changeTaskTitle = useCallback((todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatch(updateTaskTC(todoList_ID, task_ID, {title: newTitle}));
+    dispatch(updateTask(todoList_ID, task_ID, {title: newTitle}));
   }, [dispatch]);
 
   const changeTaskStatus = useCallback((todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatch(updateTaskTC(todoList_ID, task_ID, {status: newStatus}));
+    dispatch(updateTask(todoList_ID, task_ID, {status: newStatus}));
   }, [dispatch]);
 
   const removeTaskCallback = useCallback((todoList_ID: string, task_ID: string) => {

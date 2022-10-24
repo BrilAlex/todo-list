@@ -110,11 +110,19 @@ function AppWithReducer() {
   };
 
   const changeTaskTitle = (todoList_ID: string, task_ID: string, newTitle: string) => {
-    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {title: newTitle}));
+    const task = tasks[todoList_ID].find(t => t.id === task_ID);
+    if (task) {
+      const updatedTask = {...task, title: newTitle};
+      dispatchToTasks(updateTaskAC(updatedTask));
+    }
   };
 
   const changeTaskStatus = (todoList_ID: string, task_ID: string, newStatus: TaskStatuses) => {
-    dispatchToTasks(updateTaskAC(todoList_ID, task_ID, {status: newStatus}));
+    const task = tasks[todoList_ID].find(t => t.id === task_ID);
+    if (task) {
+      const updatedTask = {...task, status: newStatus};
+      dispatchToTasks(updateTaskAC(updatedTask));
+    }
   };
 
   const removeTask = (todoList_ID: string, task_ID: string) => {

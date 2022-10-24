@@ -113,7 +113,20 @@ test("Correct task should be added to correct array", () => {
 });
 
 test("Status of specified task should be changed", () => {
-  const action = updateTaskAC("todoList_ID2", "2", {status: TaskStatuses.New});
+  const updatedTask: TaskType = {
+    id: "2",
+    todoListId: "todoList_ID2",
+    title: "Juice",
+    description: "",
+    status: TaskStatuses.New,
+    priority: TaskPriorities.Low,
+    startDate: "",
+    deadline: "",
+    addedDate: "",
+    order: 0,
+  };
+
+  const action = updateTaskAC(updatedTask);
   const endState = tasksReducer(startState, action);
 
   expect(endState["todoList_ID1"][1].status).toBe(TaskStatuses.Completed);
@@ -121,7 +134,20 @@ test("Status of specified task should be changed", () => {
 });
 
 test("Title of specified task should be changed", () => {
-  const action = updateTaskAC("todoList_ID2", "2", {title: "Coffee"});
+  const updatedTask: TaskType = {
+    id: "2",
+    todoListId: "todoList_ID2",
+    title: "Coffee",
+    description: "",
+    status: TaskStatuses.New,
+    priority: TaskPriorities.Low,
+    startDate: "",
+    deadline: "",
+    addedDate: "",
+    order: 0,
+  };
+
+  const action = updateTaskAC(updatedTask);
   const endState = tasksReducer(startState, action);
 
   expect(endState["todoList_ID1"][1].title).toBe("CSS");

@@ -119,7 +119,8 @@ export const todoListsAPI = {
       .put<ResponseType<{ item: TaskType }>>(
         `todo-lists/${todoList_ID}/tasks/${task_ID}`,
         taskModel,
-      );
+      )
+      .then(response => response.data);
   },
 };
 export const authAPI = {
