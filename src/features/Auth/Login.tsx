@@ -7,7 +7,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {FormikHelpers, useFormik} from "formik";
+import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router-dom";
 import {useAppDispatch} from "../../utils/reduxUtils";
@@ -45,16 +45,9 @@ export const Login = () => {
       }
       return errors;
     },
-    onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-      const action = await dispatch(authActions.login(values));
-      if (authActions.login.rejected.match(action)) {
-        if (action.payload?.fieldsErrors?.length) {
-          const error = action.payload.fieldsErrors[0];
-          formikHelpers.setFieldError(error.field, error.error);
-        }
-      } else {
-        formik.resetForm();
-      }
+    onSubmit: async (values: FormValuesType) => {
+      dispatch(authActions.login(values));
+      formik.resetForm();
     },
   });
 

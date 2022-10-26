@@ -1,11 +1,11 @@
 import * as appSelectors from "./selectors";
-import {asyncAppActions, appSlice} from "./applicationReducer";
+import {appSlice} from "./applicationReducer";
+import {initializeApp} from "./applicationSagas";
 
 const appReducer = appSlice.reducer;
 
 const appActions = {
-  ...appSlice.actions,
-  ...asyncAppActions,
+  initializeApp,
 };
 
 export {

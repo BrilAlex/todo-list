@@ -61,3 +61,6 @@ export type LoginParamsType = {
   rememberMe?: boolean
   captcha?: string
 };
+
+export type MeResponseDataType = ResponseType<{ id: number, email: string, login: string }>;
+export type LoginResponseDataType = ResponseType<{ userId?: number }>;

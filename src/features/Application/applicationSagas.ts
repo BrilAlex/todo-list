@@ -1,18 +1,19 @@
 import {put, call, takeEvery} from "redux-saga/effects";
-import {authAPI, MeResponseDataType} from "../api/todoListsApi";
-import {setIsLoggedInAC} from "../features/Login/authReducer";
-import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../utils/errorUtils";
-import {setIsInitializedAC} from "./appReducer";
+import {authAPI} from "../../api/todoListsApi";
+import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/errorUtils";
+import {MeResponseDataType} from "../../api/types";
+import {initializeAppAC} from "./applicationReducer";
+import {setIsLoggedIn} from "../Auth/authReducer";
 
 export function* initializeAppSagaWorker() {
   try {
     const data: MeResponseDataType = yield call(authAPI.me);
     if (data.resultCode === 0) {
-      yield put(setIsLoggedInAC(true));
+      yield put(setIsLoggedIn({value: true}));
     } else {
       yield* handleServerAppErrorSaga(data);
     }
-    yield put(setIsInitializedAC(true));
+    yield put(initializeAppAC());
   } catch (error) {
     yield* handleServerNetworkErrorSaga(error as { message: string });
   }

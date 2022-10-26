@@ -41,7 +41,7 @@ export const TodoList = React.memo(({demoMode = false, ...props}: TodoListPropsT
   const {changeTodoListTitle, changeTodoListFilter, removeTodoList} = useActions(todoListsActions);
 
   const changeTitle = useCallback((newTitle: string) => {
-    changeTodoListTitle({todoList_ID: props.todoList.id, newTitle});
+    changeTodoListTitle(props.todoList.id, newTitle);
   }, [changeTodoListTitle, props.todoList.id]);
 
   const changeFilter = useCallback((filterValue: FilterValueType) => {
@@ -52,22 +52,9 @@ export const TodoList = React.memo(({demoMode = false, ...props}: TodoListPropsT
     removeTodoList(props.todoList.id)
   }, [removeTodoList, props.todoList.id]);
 
-  const addTaskCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-    const resultAction = await dispatch(tasksActions.addTask({
-      todoList_ID: props.todoList.id, title
-    }));
-
-    if (tasksActions.addTask.rejected.match(resultAction)) {
-      if (resultAction.payload?.errors.length) {
-        const errorMessage = resultAction.payload.errors[0];
-        helper.setError(errorMessage);
-      } else {
-        helper.setError("Some error occurred");
-      }
-    } else {
-      helper.setValue("");
-    }
-
+  const addTaskCallback = useCallback((title: string, helper: AddItemFormSubmitHelperType) => {
+    dispatch(tasksActions.addTask(props.todoList.id, title));
+    helper.setValue("");
   }, [dispatch, props.todoList.id]);
 
   const renderFilterButton = (

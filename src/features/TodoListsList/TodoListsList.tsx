@@ -28,19 +28,9 @@ export const TodoListsList: FC<PropsType> = ({demoMode = false}) => {
     }
   }, [fetchTodoLists, demoMode, isLoggedIn, todoLists.length]);
 
-  const addTodoListCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-    const resultAction = await dispatch(todoListsActions.addTodoList(title));
-
-    if (todoListsActions.addTodoList.rejected.match(resultAction)) {
-      if (resultAction.payload?.errors.length) {
-        const errorMessage = resultAction.payload.errors[0];
-        helper.setError(errorMessage);
-      } else {
-        helper.setError("Some error occurred");
-      }
-    } else {
-      helper.setValue("");
-    }
+  const addTodoListCallback = useCallback((title: string, helper: AddItemFormSubmitHelperType) => {
+    dispatch(todoListsActions.addTodoList(title));
+    helper.setValue("");
   }, [dispatch]);
 
   if (!isLoggedIn) {

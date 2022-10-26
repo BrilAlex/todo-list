@@ -1,13 +1,18 @@
 import {addTaskSagaWorker, fetchTasksSagaWorker, removeTaskSagaWorker} from "./tasksSagas";
 import {call, put} from "redux-saga/effects";
-import {setAppErrorAC, setAppStatusAC} from "../../app/appReducer";
+import {todoListsAPI} from "../../api/todoListsApi";
 import {
-  GetTasksResponseType, ResponseType,
+  GetTasksResponseType,
+  ResponseType,
   TaskPriorities,
-  TaskStatuses, TaskType,
-  todoListsAPI
-} from "../../api/todoListsApi";
-import {addTaskAC, changeTaskEntityStatusAC, removeTaskAC, setTasksAC} from "./tasksReducer";
+  TaskStatuses,
+  TaskType
+} from "../../api/types";
+import {commonAppActions} from "../CommonActions/app";
+import {addTaskAC, changeTaskEntityStatus, removeTaskAC, setTasksAC} from "./tasksReducer";
+
+// Common App actions
+const {setAppStatus, setAppError} = commonAppActions;
 
 test("fetchTasksSagaWorker should work correctly", () => {
   const action = {type: "TASKS/FETCH-TASKS", todoList_ID: "todolistId1"} as const;
@@ -24,10 +29,13 @@ test("fetchTasksSagaWorker should work correctly", () => {
   };
   const gen = fetchTasksSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
   expect(gen.next().value).toEqual(call(todoListsAPI.getTasks, action.todoList_ID));
-  expect(gen.next(apiResponseMock).value).toEqual(put(setTasksAC(action.todoList_ID, apiResponseMock.items)));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('succeeded')));
+  expect(gen.next(apiResponseMock).value).toEqual(put(setTasksAC({
+    todoList_ID: action.todoList_ID,
+    tasks: apiResponseMock.items,
+  })));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'succeeded'})));
   expect(gen.next().done).toBeTruthy();
 });
 
@@ -35,10 +43,10 @@ test("fetchTasksSagaWorker should return an error", () => {
   const action = {type: "TASKS/FETCH-TASKS", todoList_ID: "todolistId1"} as const;
   const gen = fetchTasksSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
   expect(gen.next().value).toEqual(call(todoListsAPI.getTasks, action.todoList_ID));
-  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppErrorAC("Some error")));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('failed')));
+  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppError({error: "Some error"})));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'failed'})));
 });
 
 test("addTaskSagaWorker should work correctly when request is successful", () => {
@@ -57,10 +65,10 @@ test("addTaskSagaWorker should work correctly when request is successful", () =>
   };
   const gen = addTaskSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
   expect(gen.next().value).toEqual(call(todoListsAPI.createTask, action.todoList_ID, action.title));
   expect(gen.next(apiResponseMock).value).toEqual(put(addTaskAC(apiResponseMock.data.item)));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('succeeded')));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'succeeded'})));
   expect(gen.next().done).toBeTruthy();
 });
 
@@ -68,10 +76,10 @@ test("addTaskSagaWorker should return an error", () => {
   const action = {type: "TASKS/ADD-TASK", todoList_ID: "todolistId1", title: "New task"} as const;
   const gen = addTaskSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
   expect(gen.next().value).toEqual(call(todoListsAPI.createTask, action.todoList_ID, action.title));
-  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppErrorAC("Some error")));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('failed')));
+  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppError({error: "Some error"})));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'failed'})));
 });
 
 test("removeTaskSagaWorker should work correctly when request is successful", () => {
@@ -84,11 +92,18 @@ test("removeTaskSagaWorker should work correctly when request is successful", ()
   };
   const gen = removeTaskSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
-  expect(gen.next().value).toEqual(put(changeTaskEntityStatusAC(action.todoList_ID, action.task_ID, "loading")));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
+  expect(gen.next().value).toEqual(put(changeTaskEntityStatus({
+    todoList_ID: action.todoList_ID,
+    task_ID: action.task_ID,
+    status: "loading",
+  })));
   expect(gen.next().value).toEqual(call(todoListsAPI.deleteTask, action.todoList_ID, action.task_ID));
-  expect(gen.next(apiResponseMock).value).toEqual(put(removeTaskAC(action.todoList_ID, action.task_ID)));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('succeeded')));
+  expect(gen.next(apiResponseMock).value).toEqual(put(removeTaskAC({
+    todoList_ID: action.todoList_ID,
+    task_ID: action.task_ID,
+  })));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'succeeded'})));
   expect(gen.next().done).toBeTruthy();
 });
 
@@ -96,9 +111,13 @@ test("removeTaskSagaWorker should return an error", () => {
   const action = {type: "TASKS/REMOVE-TASK", todoList_ID: "todolistId1", task_ID: "1"} as const;
   const gen = removeTaskSagaWorker(action);
 
-  expect(gen.next().value).toEqual(put(setAppStatusAC('loading')));
-  expect(gen.next().value).toEqual(put(changeTaskEntityStatusAC(action.todoList_ID, action.task_ID, "loading")));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'loading'})));
+  expect(gen.next().value).toEqual(put(changeTaskEntityStatus({
+    todoList_ID: action.todoList_ID,
+    task_ID: action.task_ID,
+    status: "loading",
+  })));
   expect(gen.next().value).toEqual(call(todoListsAPI.deleteTask, action.todoList_ID, action.task_ID));
-  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppErrorAC("Some error")));
-  expect(gen.next().value).toEqual(put(setAppStatusAC('failed')));
+  expect(gen.throw({message: "Some error"}).value).toEqual(put(setAppError({error: "Some error"})));
+  expect(gen.next().value).toEqual(put(setAppStatus({status: 'failed'})));
 });

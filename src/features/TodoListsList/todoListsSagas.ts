@@ -1,22 +1,26 @@
 import {call, put, takeEvery} from "redux-saga/effects";
-import {setAppStatusAC} from "../../app/appReducer";
-import {ResponseType, todoListsAPI, TodoListType} from "../../api/todoListsApi";
+import {todoListsAPI} from "../../api/todoListsApi";
 import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/errorUtils";
+import {commonAppActions} from "../CommonActions/app";
+import {ResponseType, TodoListType} from "../../api/types";
 import {
   addTodoListAC,
-  changeTodolistEntityStatusAC,
+  changeTodolistEntityStatus,
   changeTodoListTitleAC,
   removeTodoListAC
 } from "./todoListsReducer";
 
+// Common App actions
+const {setAppStatus} = commonAppActions;
+
 export function* removeTodoListSagaWorker(action: ReturnType<typeof removeTodoList>) {
-  yield put(setAppStatusAC("loading"));
-  yield put(changeTodolistEntityStatusAC(action.todoList_ID, "loading"));
+  yield put(setAppStatus({status: "loading"}));
+  yield put(changeTodolistEntityStatus({id: action.todoList_ID, status: "loading"}));
   try {
     const data: ResponseType = yield call(todoListsAPI.deleteTodoList, action.todoList_ID);
     if (data.resultCode === 0) {
-      yield put(removeTodoListAC(action.todoList_ID));
-      yield put(setAppStatusAC("succeeded"));
+      yield put(removeTodoListAC({id: action.todoList_ID}));
+      yield put(setAppStatus({status: "succeeded"}));
     }
   } catch (error) {
     yield* handleServerNetworkErrorSaga(error as { message: string });
@@ -27,13 +31,13 @@ export const removeTodoList = (todoList_ID: string) =>
   ({type: "TODOLISTS/REMOVE-TODOLIST", todoList_ID} as const);
 
 export function* addTodoListSagaWorker(action: ReturnType<typeof addTodoList>) {
-  yield put(setAppStatusAC("loading"));
+  yield put(setAppStatus({status: "loading"}));
   try {
     const data: ResponseType<{ item: TodoListType }> = yield call(todoListsAPI.createTodoList, action.title);
     if (data.resultCode === 0) {
       const newTodoList = data.data.item;
-      yield put(addTodoListAC(newTodoList));
-      yield put(setAppStatusAC("succeeded"));
+      yield put(addTodoListAC({todoList: newTodoList}));
+      yield put(setAppStatus({status: "succeeded"}));
     } else {
       yield* handleServerAppErrorSaga(data);
     }
@@ -46,12 +50,12 @@ export const addTodoList = (title: string) =>
   ({type: "TODOLISTS/ADD-TODOLIST", title} as const);
 
 export function* changeTodoListTitleSagaWorker(action: ReturnType<typeof changeTodoListTitle>) {
-  yield put(setAppStatusAC("loading"));
+  yield put(setAppStatus({status: "loading"}));
   try {
     const data: ResponseType = yield call(todoListsAPI.updateTodoList, action.todoList_ID, action.newTitle);
     if (data.resultCode === 0) {
-      yield put(changeTodoListTitleAC(action.todoList_ID, action.newTitle));
-      yield put(setAppStatusAC("succeeded"));
+      yield put(changeTodoListTitleAC({id: action.todoList_ID, title: action.newTitle}));
+      yield put(setAppStatus({status: "succeeded"}));
     } else {
       yield* handleServerAppErrorSaga(data);
     }

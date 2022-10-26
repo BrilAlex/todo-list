@@ -7,7 +7,7 @@ export type AddItemFormSubmitHelperType = {
   setError: (value: string) => void
 };
 type AddItemFormPropsType = {
-  addItem: (title: string, helper: AddItemFormSubmitHelperType) => Promise<void>
+  addItem: (title: string, helper: AddItemFormSubmitHelperType) => void
   disabled?: boolean
 };
 

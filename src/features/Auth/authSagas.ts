@@ -1,22 +1,24 @@
-import {
-  authAPI,
-  LoginParamsType,
-  LoginResponseDataType,
-  ResponseType
-} from "../../api/todoListsApi";
+import {authAPI} from "../../api/todoListsApi";
 import {call, put, takeEvery} from "redux-saga/effects";
-import {setAppStatusAC} from "../../app/appReducer";
 import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/errorUtils";
-import {setIsLoggedInAC} from "./authReducer";
-import {clearTodoListsDataAC} from "../TodoListsList/todoListsReducer";
+import {LoginParamsType, LoginResponseDataType, ResponseType} from "../../api/types";
+import {commonTodoListsActions} from "../CommonActions/todoLists";
+import {commonAppActions} from "../CommonActions/app";
+import {setIsLoggedIn} from "./authReducer";
+
+// Common App actions
+const {setAppStatus} = commonAppActions;
+
+// Common TodoLists actions
+const {clearTodoListsData} = commonTodoListsActions;
 
 export function* loginSagaWorker(action: ReturnType<typeof login>) {
-  yield put(setAppStatusAC("loading"));
+  yield put(setAppStatus({status: "loading"}));
   try {
     const data: LoginResponseDataType = yield call(authAPI.login, action.data);
     if (data.resultCode === 0) {
-      yield put(setIsLoggedInAC(true));
-      yield put(setAppStatusAC("succeeded"));
+      yield put(setIsLoggedIn({value: true}));
+      yield put(setAppStatus({status: "succeeded"}));
     } else {
       yield* handleServerAppErrorSaga(data);
     }
@@ -27,13 +29,13 @@ export function* loginSagaWorker(action: ReturnType<typeof login>) {
 export const login = (data: LoginParamsType) => ({type: "AUTH/LOGIN", data} as const);
 
 export function* logoutSagaWorker() {
-  yield put(setAppStatusAC("loading"));
+  yield put(setAppStatus({status: "loading"}));
   try {
     const data: ResponseType = yield call(authAPI.logout);
     if (data.resultCode === 0) {
-      yield put(clearTodoListsDataAC());
-      yield put(setIsLoggedInAC(false));
-      yield put(setAppStatusAC("succeeded"));
+      yield put(clearTodoListsData());
+      yield put(setIsLoggedIn({value: false}));
+      yield put(setAppStatus({status: "succeeded"}));
     } else {
       yield* handleServerAppErrorSaga(data);
     }

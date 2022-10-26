@@ -1,18 +1,28 @@
 import * as todoListsSelectors from "./selectors";
-import {asyncActions as asyncTodoListsActions, todoListsSlice} from "./todoListsReducer";
-import {asyncActions as asyncTasksActions, tasksSlice} from "./tasksReducer";
+import {
+  asyncActions as asyncTodoListsActions,
+  changeTodoListFilter,
+  todoListsSlice
+} from "./todoListsReducer";
+import {tasksSlice} from "./tasksReducer";
+import {addTask, removeTask, updateTask} from "./tasksSagas";
+import {addTodoList, changeTodoListTitle, removeTodoList} from "./todoListsSagas";
 
 const todoListsReducer = todoListsSlice.reducer;
 const tasksReducer = tasksSlice.reducer;
 
 const todoListsActions = {
-  ...todoListsSlice.actions,
+  removeTodoList,
+  addTodoList,
+  changeTodoListTitle,
+  changeTodoListFilter,
   ...asyncTodoListsActions,
 }
 
 const tasksActions = {
-  ...tasksSlice.actions,
-  ...asyncTasksActions,
+  removeTask,
+  addTask,
+  updateTask,
 };
 
 export {
